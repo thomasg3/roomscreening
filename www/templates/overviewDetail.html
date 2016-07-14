@@ -1,17 +1,13 @@
 <ion-side-menus enable-menu-with-back-views="false">
-  <ion-side-menu-content>
-    <ion-nav-bar class="bar-positive">
-
-    </ion-nav-bar>
-    <ion-nav-view name="menuContent"></ion-nav-view>
-  </ion-side-menu-content>
-
+  <!--Left Overview Panel -->
   <ion-side-menu side="left" expose-aside-when="large">
-    <ion-nav-bar class="bar-positive">
-      <ion-nav-back-button>
-      </ion-nav-back-button>
-
-    </ion-nav-bar>
     <ion-nav-view name="overviewContent"></ion-nav-view>
   </ion-side-menu>
+
+  <!-- Center Detail Panel -->
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-positive"></ion-nav-bar>
+    <ion-nav-view name="detailContent"></ion-nav-view>
+  </ion-side-menu-content>
+
 </ion-side-menus>

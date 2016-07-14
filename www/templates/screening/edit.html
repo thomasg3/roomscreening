@@ -1,0 +1,63 @@
+<ion-view cache-view="false">
+  <ion-header-bar class="bar-positive">
+
+      <a class="button button-clear icon-left ion-android-arrow-back" href="#" nav-direction="back">
+        Terug
+      </a>
+      <h1 class="title">Nieuwe Screening</h1>
+      <button class="button button-clear" ng-click="save()">Opslaan</button>
+  </ion-header-bar>
+
+  <ion-content>
+    <form class="col-offset-25 col-50 padding" ng-submit="save()">
+      <div class="list">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Client
+          </div>
+          <select ng-model="screening.client_name">
+            <option></option>
+            <option>Thomas</option>
+            <option>Pierre</option>
+            <option>Isaac</option>
+            <option>John</option>
+          </select>
+        </label>
+
+        <label class="item item-input">
+          <span class="input-label">In bijzijn van</span>
+          <input type="text" ng-model="screening.companions">
+        </label>
+
+        <label class="item item-input">
+          <span class="input-label">Soort van woning</span>
+          <input type="text" ng-model="screening.house_type">
+        </label>
+
+        <label class="item item-input">
+          <span class="input-label">Woonsituatie</span>
+          <input type="text" ng-model="screening.living_situation">
+        </label>
+
+        <label class="item item-input">
+          <span class="input-label">Aanwezige hulp</span>
+          <input type="text" ng-model="screening.aid">
+        </label>
+
+        <label class="item item-input">
+          <span class="input-label">Loophulpmiddelen</span>
+          <input type="text" ng-model="screening.walking_aid">
+        </label>
+
+        <label class="item item-input">
+          <span class="input-label">Bijzonderheden</span>
+          <input type="text" ng-model="screening.particularities">
+        </label>
+
+        <label class="item">
+          <button class="button button-full button-positive" type="submit">Opslaan</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

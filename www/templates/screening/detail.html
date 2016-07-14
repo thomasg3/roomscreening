@@ -1,0 +1,70 @@
+<ion-view>
+
+
+  <ion-nav-buttons side="right">
+    <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward">
+      <i class="icon ion-edit"></i>
+      Bewerken
+    </a>
+  </ion-nav-buttons>
+
+  <ion-content>
+    <div class="row">
+      <div class="col text-center">
+        <h1 class="dark">{{screening.client_name}}</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-right">
+        <p> In bijzijn van: </p>
+        <p> Soort van woning: </p>
+        <p> Woonsituatie: </p>
+        <p> Aanwezige hulp: </p>
+        <p> Loophulpmiddelen: </p>
+        <p> Bijzonderheden: </p>
+
+      </div>
+      <div class="col"> <p> {{screening.companions}} </p>
+        <p> {{screening.house_type}} </p>
+        <p> {{screening.living_situation}} </p>
+        <p> {{screening.aid}} </p>
+        <p> {{screening.walking_aid}} </p>
+        <p> {{screening.particularities}} </p>
+      </div>
+    </div>
+
+    <ion-list>
+      <ion-item collection-repeat="room in screening.rooms">
+        {{room.name}}
+        <span class="item-note">
+          {{room.issues}}
+          <span ng-if="room.issues == 1">
+            hindernis
+          </span>
+          <span ng-if="room.issues != 1">
+            hindernissen
+          </span>
+        </span>
+      </ion-item>
+    </ion-list>
+
+
+
+      <button class=" button button-full button-large icon-center ion-play">
+         Screening Hervatten
+      </button>
+      <button class="button button-full button-large icon-center ion-checkmark">
+        Screening Afwerken
+      </button>
+
+
+
+
+
+
+
+  </ion-content>
+  <div class="bar bar-footer bar-stable">
+    <div class="title"><small>Laatst Bewerkt: <b>{{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}</b></small></div>
+  </div>
+</ion-view>

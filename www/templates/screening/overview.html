@@ -1,0 +1,25 @@
+
+<ion-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Screenings</h1>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list show-delete="showDelete">
+      <ion-item class="icon-item-left item-balanced" href="#/screenings/edit" nav-direction="forward">
+        <i class="icon ion-plus"></i>
+        Screening Toevoegen
+      </ion-item>
+
+      <ion-item
+      ng-repeat="screening in screeningsArray | orderBy: '-last_edit'"
+      ng-class="{'item-dark': isSelected(screening.id)}"
+      ng-click="select(screening.id)"
+      on-swipe-right="swipeRight()">
+        <ion-delete-button class="ion-minus-circled" ng-click="remove(screening.id)"></ion-delete-button>
+        {{screening.client_name}}
+        <span class="item-note">
+          {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
+        </span>
+    </ion-list>
+  </ion-content>
+</ion-view>
