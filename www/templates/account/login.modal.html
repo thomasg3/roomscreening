@@ -1,8 +1,37 @@
 <ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">RoomScreening</h1>
-  </ion-header-bar>
   <ion-content>
-    Hello there;
+
+    <div class="row row-center">
+      <div class="col col-center text-center">
+        <h1>RoomScreening</h1>
+        <form name="loginForm" ng-submit="doLogin()">
+          <ion-list>
+
+            <label class="item item-input">
+              <input type="text" placeholder="Emailadres" ng-model="loginData.email" required>
+            </label>
+
+            <label class="item item-input">
+              <input type="password" placeholder="Wachtwoord" ng-model="loginData.password" required>
+            </label>
+
+            <button class="button button-full button-positive padding-top" type="submit">Login</button>
+
+
+          </ion-list>
+        </form>
+      </div>
+    </div>
+
   </ion-content>
+
+  <ion-footer-bar class="bar-assertive" ng-if="noInternet">
+    <h1 class="title">No Internet Connection</h1>
+  </ion-footer-bar>
 </ion-modal-view>
+
+<style>
+.row, .scroll {
+  height: 100%
+}
+</style>
