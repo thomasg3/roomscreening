@@ -3,23 +3,23 @@
 
     <div class="row row-center">
       <div class="col col-center text-center">
-        <h1>RoomScreening</h1>
-        <form name="loginForm" ng-submit="doLogin()">
-          <ion-list>
-
-            <label class="item item-input">
-              <input type="text" placeholder="Emailadres" ng-model="loginData.email" required>
-            </label>
-
-            <label class="item item-input">
-              <input type="password" placeholder="Wachtwoord" ng-model="loginData.password" required>
-            </label>
-
-            <button class="button button-full button-positive padding-top" type="submit">Login</button>
-
-
-          </ion-list>
-        </form>
+        <div ng-if="!loading">
+          <h1>RoomScreening</h1>
+          <form class="padding" name="loginForm" ng-submit="doLogin()">
+            <ion-list>
+              <label class="item item-input">
+                <input type="email" placeholder="Emailadres" ng-model="loginData.email" required>
+              </label>
+              <label class="item item-input">
+                <input type="password" placeholder="Wachtwoord" ng-model="loginData.password" required>
+              </label>
+                <button class="button button-large button-block button-positive" ng-class="{'button-clear': loginForm.$invalid}" type="submit" ng-disabled="loginForm.$invalid">Login</button>
+            </ion-list>
+          </form>
+        </div>
+        <div ng-if="loading">
+          <ion-spinner></ion-spinner>
+        </div>
       </div>
     </div>
 
