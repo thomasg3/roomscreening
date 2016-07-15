@@ -5,24 +5,23 @@
         Terug
       </a>
       <h1 class="title">Nieuwe Screening</h1>
-      <button class="button button-clear" ng-click="save()">Opslaan</button>
   </ion-header-bar>
 
   <ion-content>
-    <form class="col-offset-25 col-50 padding" ng-submit="save()">
+    <form class="col-offset-25 col-50 padding" ng-submit="save()" name="editScreeningForm" novalidate="">
       <div class="list">
         <label class="item item-input item-select">
           <div class="input-label">
             Client
           </div>
-          <select ng-model="screening.client_name">
-            <option></option>
-            <option>Thomas</option>
-            <option>Pierre</option>
-            <option>Isaac</option>
-            <option>John</option>
+          <select ng-model="screening.client_name" required name="client_name">
+            <option value="">Select Client</option>
+            <option ng-repeat="client in clients | orderBy:'name'">{{client.name}}</option>
           </select>
+          <p class="error" ng-show="editScreeningForm.client_name.$error.required">Verplicht veld.</p>
         </label>
+
+
 
         <label class="item item-input">
           <span class="input-label">In bijzijn van</span>
@@ -55,7 +54,7 @@
         </label>
 
         <label class="item">
-          <button class="button button-full button-positive" type="submit">Opslaan</button>
+          <button class="button button-full button-positive" type="submit" ng-disabled="editScreeningForm.$invalid">Opslaan</button>
         </label>
       </div>
     </form>

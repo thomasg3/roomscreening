@@ -5,7 +5,7 @@ angular.module('roomscreening.controllers', [])
 })
 
 
-.controller('ScreeningOverviewController', function($rootScope, $scope, $stateParams ,LocalScreeningService){
+.controller('ScreeningOverviewController', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup){
 
   var array = function(screenings){
     return Object.keys(screenings).map(function(id){return screenings[id];});
@@ -41,11 +41,29 @@ angular.module('roomscreening.controllers', [])
     $scope.showDelete = true;
   }
 
-  $scope.remove = function(id){
-    LocalScreeningService.remove(id);
-    $scope.screenings = LocalScreeningService.getAll();
-    $scope.screeningsArray = array($scope.screenings);
+  $scope.swipeLeft = function(){
     $scope.showDelete = false;
+  }
+
+  $scope.remove = function(id){
+    var confirmPopup = $ionicPopup.confirm({
+      title: "Screening Verwijderen",
+      template: "Bent u zeker dat u deze screening wilt verwijderen?",
+      cancelText: 'Annuleer'
+    }).then(function(confirmed){
+      if(confirmed){
+        LocalScreeningService.remove(id);
+        $scope.screenings = LocalScreeningService.getAll();
+        $scope.screeningsArray = array($scope.screenings);
+        if($scope.selectedId == id){
+          $scope.select();
+        }
+        $scope.showDelete = false;
+      } else {
+        $scope.showDelete = false;
+      }
+    })
+
   }
 
 
@@ -60,6 +78,17 @@ angular.module('roomscreening.controllers', [])
 })
 
 .controller('ScreeningEditController', function($scope, LocalScreeningService, $state, $stateParams,$ionicHistory){
+
+  $scope.clients = [
+    {name: "Zorro"},
+    {name: "Curt"},
+    {name: "Alice"},
+    {name: "Bob"},
+    {name: "Denise"},
+    {name: "Engelbert"},
+    {name: "Fons"}
+  ];
+
   if($stateParams.id != null){
     $scope.screening = LocalScreeningService.get($stateParams.id);
   } else {
@@ -71,6 +100,7 @@ angular.module('roomscreening.controllers', [])
       LocalScreeningService.update($scope.screening);
       var id = $stateParams.id;
     } else {
+      $scope.screening.rooms = [];
       var id = LocalScreeningService.add($scope.screening);
     }
     $ionicHistory.nextViewOptions({

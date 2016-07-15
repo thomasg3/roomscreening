@@ -1,4 +1,6 @@
 angular.module('roomscreening.services', [])
+  .constant('appAuthenticationToken', '')
+  .constant('baseURL', '')
   .factory('LocalScreeningService', function($localStorage){
 
       $localStorage = $localStorage.$default({

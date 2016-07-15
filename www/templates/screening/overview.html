@@ -6,7 +6,7 @@
   <ion-content>
     <ion-list show-delete="showDelete">
       <ion-item class="icon-item-left item-balanced" href="#/screenings/edit" nav-direction="forward">
-        <i class="icon ion-plus"></i>
+        <i class="icon ion-plus-circled"></i>
         Screening Toevoegen
       </ion-item>
 
@@ -14,12 +14,22 @@
       ng-repeat="screening in screeningsArray | orderBy: '-last_edit'"
       ng-class="{'item-dark': isSelected(screening.id)}"
       ng-click="select(screening.id)"
-      on-swipe-right="swipeRight()">
+      on-swipe-right="swipeRight()"
+      on-swipe-left="swipeLeft()">
         <ion-delete-button class="ion-minus-circled" ng-click="remove(screening.id)"></ion-delete-button>
         {{screening.client_name}}
         <span class="item-note">
           {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
         </span>
+      </ion-item>
+
+      <ion-item ng-if="!screeningsArray.length" class="item-icon-left item-icon-right item-text-wrap text-center">
+        <i class="icon ion-arrow-up-a"></i>
+        <h2>Geen Screenings</h2>
+        <p>Maak een nieuwe screening aan.</p>
+        <i class="icon ion-arrow-up-a"></i>
+      </ion-item>
+
     </ion-list>
   </ion-content>
 </ion-view>
