@@ -1,12 +1,12 @@
 <ion-view>
-  <div ng-if="screening">
+
     <ion-nav-buttons side="right">
-      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward">
+      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward" ng-if="screening">
         <i class="icon ion-edit"></i>
         Bewerken
       </a>
     </ion-nav-buttons>
-
+  <div ng-if="screening">
     <ion-content>
       <!-- Title -->
       <div class="row">
