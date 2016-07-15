@@ -24,8 +24,12 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-
-    .state('app', {
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/account/login.html',
+    controller: 'LoginController'
+  })
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/overviewDetail.html',
