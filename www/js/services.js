@@ -1,6 +1,6 @@
 angular.module('roomscreening.services', [])
   .constant('appAuthenticationToken', '')
-  .constant('baseURL', '')
+  .constant('baseURL', 'https://pxl.apexhealth.eu/ords/hopp/rs/api/')
   .factory('LocalScreeningService', function($localStorage){
 
       $localStorage = $localStorage.$default({
@@ -34,3 +34,32 @@ angular.module('roomscreening.services', [])
         }
       }
   })
+  .factory('LoginService', function($localStorage, baseURL, $http){
+    return {
+      isLoggedIn: function(){
+
+      },
+      login: function(email, password){
+        $http.get(baseURL+'login', {
+          headers: {
+            'username': email,
+            'password': password
+          }
+        }).then(function(response){
+          //success
+          console.log(response);
+        }).then(function(response){
+          //err
+          console.log(response);
+        })
+      },
+      logout: function(){
+
+      },
+      currentUser: function(){
+
+      }
+    }
+  })
+
+  ;
