@@ -32,4 +32,8 @@
 
     </ion-list>
   </ion-content>
+  <ion-footer-bar class="wrap-text">
+    <h1 class="title">{{currentUser.email}}</h1>
+    <button class="button button-clear button-stable icon ion-log-out" ng-click="logout()"></button>
+  </ion-footer-bar>
 </ion-view>

@@ -32,3 +32,12 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   height: 100% !important;
   width: 100% !important;
 }
+
+.errorMessage {
+  background-color: $assertive;
+  padding-top: 5px;
+  padding-bottom: 1px;
+  color: $light;
+  margin-bottom: 10px;
+
+}

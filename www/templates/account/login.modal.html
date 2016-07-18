@@ -6,6 +6,12 @@
         <div ng-if="!loading">
           <h1>RoomScreening</h1>
           <form class="padding" name="loginForm" ng-submit="doLogin()">
+            <div class="errorMessage" ng-if="falseCredentails">
+              <p>Ongeldige email/wachtwoord combinatie</p>
+            </div>
+            <div class="errorMessage" ng-if="error">
+              <p>Iets ging mis op de server. Probeer het later nog eens.</p>
+            </div>
             <ion-list>
               <label class="item item-input">
                 <input type="email" placeholder="Emailadres" ng-model="loginData.email" required>

@@ -9822,3 +9822,10 @@ a.button {
   background-color: #444 !important;
   height: 100% !important;
   width: 100% !important; }
+
+.errorMessage {
+  background-color: #ef473a;
+  padding-top: 5px;
+  padding-bottom: 1px;
+  color: #fff;
+  margin-bottom: 10px; }
