@@ -34,11 +34,16 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('AccountService', function($localStorage, baseURL, $http) {
+  .factory('AccountService', function($localStorage, baseURL, $http, $rootScope) {
+
+    $localStorage = $localStorage.$default({
+      loggedIn: false,
+      currentUser: {}
+    });
+
     return {
-      isLoggedIn: function() {
-        return $localStorage.currentUser != null;
-      },
+      isLoggedIn: function(){return $localStorage.isLoggedIn;},
+      currentUser:  function(){return $localStorage.currentUser;},
       //success = successful login, failure = failed to login, error = some kind of error occured
       login: function(email, password, success, failure ,error) {
         $http.get(baseURL + 'login', {
@@ -52,6 +57,7 @@ angular.module('roomscreening.services', [])
               var user = response.data;
               user.email = email;
               $localStorage.currentUser = user;
+              $localStorage.loggedIn = true;
               success();
             } else {
               failure();
@@ -62,10 +68,8 @@ angular.module('roomscreening.services', [])
         });
       },
       logout: function() {
-          delete $localStorage.currentUser;
-      },
-      currentUser: function() {
-        return $localStorage.currentUser;
+         $localStorage.currentUser = {};
+         $localStorage.loggedIn = false;
       }
     }
   })

@@ -1,16 +1,7 @@
 angular.module('roomscreening.controllers.screenings', [])
 
-.controller('ScreeningOverviewController', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, AccountService, $state ,$ionicHistory){
+.controller('ScreeningOverviewController', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup){
 
-
-
-  $scope.currentUser = AccountService.currentUser();
-  if($scope.currentUser == null){
-    $ionicHistory.nextViewOptions({
-      historyRoot: true
-    });
-    $state.go('login');
-  }
 
   var array = function(screenings){
     return Object.keys(screenings).map(function(id){return screenings[id];});
@@ -64,23 +55,10 @@ angular.module('roomscreening.controllers.screenings', [])
         $scope.showDelete = false;
       }
     })
-
   }
 
-  $scope.logout = function(){
-    var confirmPopup = $ionicPopup.confirm({
-      title: "Logout",
-      template: "Bent u zeker dat u wilt uitloggen als <b>"+$scope.currentUser.email+"</b>",
-      cancelText: "Annuleer"
-    }).then(function(confirmed){
-      if(confirmed){
-        AccountService.logout();
-        $ionicHistory.nextViewOptions({
-          historyRoot: true
-        });
-        $state.go('login', {}, {reload: true});
-      }
-    });
+  $scope.fuckyouangular = function(){
+    alert("FU Anuglar and ionic shit");
   }
 
   reset();
@@ -90,7 +68,6 @@ angular.module('roomscreening.controllers.screenings', [])
   $scope.$on('screeningSelected', function(event, screening){
     $scope.screening = screening;
   });
-
   $rootScope.$broadcast('screeningDetailReady');
 })
 
