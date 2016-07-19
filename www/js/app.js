@@ -27,7 +27,8 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
   .state('login', {
     url: '/login',
     templateUrl: 'templates/account/login.html',
-    controller: 'LoginController'
+    controller: 'LoginController',
+    cache: false
   })
   .state('app', {
     url: '/app',

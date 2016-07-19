@@ -1,8 +1,8 @@
 angular.module('roomscreening.controllers.screenings', [])
 
-.controller('ScreeningOverviewController', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup){
-
-
+.controller('ScreeningOverviewController', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory){
+  $ionicHistory.clearCache();
+  $ionicHistory.clearHistory();
   var array = function(screenings){
     return Object.keys(screenings).map(function(id){return screenings[id];});
   }
@@ -55,10 +55,6 @@ angular.module('roomscreening.controllers.screenings', [])
         $scope.showDelete = false;
       }
     })
-  }
-
-  $scope.fuckyouangular = function(){
-    alert("FU Anuglar and ionic shit");
   }
 
   reset();

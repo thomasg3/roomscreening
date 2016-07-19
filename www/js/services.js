@@ -1,5 +1,5 @@
 angular.module('roomscreening.services', [])
-  .constant('appAuthenticationToken', '')
+  .constant('appAuthenticationToken', '1234DFSFSG5T6G678ISFDFEE2ZVBGJIK')
   .constant('baseURL', 'https://pxl.apexhealth.eu/ords/hopp/rs/api/')
   .factory('LocalScreeningService', function($localStorage) {
 
@@ -34,16 +34,14 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('AccountService', function($localStorage, baseURL, $http, $rootScope) {
+  .factory('AccountService', function($rootScope, $localStorage, baseURL, $http, $rootScope) {
 
-    $localStorage = $localStorage.$default({
+    $localStorage.$default({
       loggedIn: false,
       currentUser: {}
     });
 
     return {
-      isLoggedIn: function(){return $localStorage.isLoggedIn;},
-      currentUser:  function(){return $localStorage.currentUser;},
       //success = successful login, failure = failed to login, error = some kind of error occured
       login: function(email, password, success, failure ,error) {
         $http.get(baseURL + 'login', {
