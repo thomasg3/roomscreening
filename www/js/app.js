@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controllers', 'roomscreening.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $localStorage, $rootScope, $state) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,6 +19,21 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    $localStorage = $localStorage.$default({
+      currentUser: {},
+      loggedIn: false,
+      screenings: {}
+    });
+
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+      if(toState.name != 'login' && !$localStorage.loggedIn){
+        event.preventDefault();
+        $state.go('login');
+      }
+    })
+
+
   });
 })
 
@@ -27,21 +42,20 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
   .state('login', {
     url: '/login',
     templateUrl: 'templates/account/login.html',
-    controller: 'LoginController',
+    controller: 'LoginCtrl',
     cache: false
   })
   .state('app', {
     url: '/app',
     abstract: true,
-    templateUrl: 'templates/overviewDetail.html',
-    controller: 'AppCtrl'
+    templateUrl: 'templates/overviewDetail.html'
   })
   .state('app.screenings', {
     url: '/screenings',
     views: {
       'overviewContent' : {
         templateUrl: 'templates/screening/overview.html',
-        controller: 'ScreeningOverviewController'
+        controller: 'GoalOverviewCtrl'
       },
       'detailContent': {
         templateUrl: 'templates/screening/detail.html',

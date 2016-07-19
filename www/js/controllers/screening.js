@@ -1,6 +1,6 @@
-angular.module('roomscreening.controllers.screenings', [])
+angular.module('roomscreening.controllers.goals', [])
 
-.controller('ScreeningOverviewController', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory){
+.controller('GoalOverviewCtrl', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory){
   $ionicHistory.clearCache();
   $ionicHistory.clearHistory();
   var array = function(screenings){

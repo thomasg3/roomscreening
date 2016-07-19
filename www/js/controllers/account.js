@@ -1,5 +1,5 @@
 angular.module('roomscreening.controllers.account', [])
-  .controller('LoginController', function($scope, $ionicModal, AccountService, $state, $ionicHistory, $localStorage) {
+  .controller('LoginCtrl', function($scope, $log, AccountService, $state, $ionicHistory, $localStorage) {
     $scope.loading = true;
     $ionicHistory.clearCache();
     $ionicHistory.clearHistory();
@@ -15,8 +15,13 @@ angular.module('roomscreening.controllers.account', [])
       $scope.falseCredentails = false;
       $scope.error = false;
       AccountService.login($scope.loginData.email, $scope.loginData.password, function(){
-        $state.go('app.screenings');
-        $scope.loading = false;
+        if($localStorage.loggedIn){
+          $state.go('app.screenings');
+          $scope.loading = false;
+        } else {
+          $log.warn("Login", "Login did not take, try again");
+          $scope.doLogin();
+        }
       }, function(){
         $scope.loading = false;
         $scope.falseCredentails = true;
@@ -26,7 +31,7 @@ angular.module('roomscreening.controllers.account', [])
       })
     }
   })
-  .controller('LogoutController', function($scope, AccountService, $state ,$ionicHistory, $ionicPopup, $localStorage){
+  .controller('LogoutCtrl', function($scope, AccountService, $state ,$ionicHistory, $ionicPopup, $localStorage){
     $scope.currentUser = $localStorage.currentUser;
 
     $scope.logout = function(){

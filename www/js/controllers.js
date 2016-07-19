@@ -1,6 +1,6 @@
-angular.module('roomscreening.controllers', ['roomscreening.controllers.screenings', 'roomscreening.controllers.account'])
+angular.module('roomscreening.controllers', ['roomscreening.controllers.goals', 'roomscreening.controllers.account'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope) {
 
 })
 
