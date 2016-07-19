@@ -1,6 +1,6 @@
 angular.module('roomscreening.controllers.goals', [])
 
-.controller('GoalOverviewCtrl', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory){
+.controller('ScreeningOverviewCtrl', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory){
   $ionicHistory.clearCache();
   $ionicHistory.clearHistory();
   var array = function(screenings){
@@ -39,8 +39,8 @@ angular.module('roomscreening.controllers.goals', [])
 
   $scope.remove = function(id){
     var confirmPopup = $ionicPopup.confirm({
-      title: "Screening Verwijderen",
-      template: "Bent u zeker dat u deze screening wilt verwijderen?",
+      title: "Doel Verwijderen",
+      template: "Bent u zeker dat u dit doel wilt verwijderen?",
       cancelText: 'Annuleer'
     }).then(function(confirmed){
       if(confirmed){
@@ -60,7 +60,7 @@ angular.module('roomscreening.controllers.goals', [])
   reset();
 })
 
-.controller('ScreeningDetailController', function($rootScope, $scope){
+.controller('ScreeningDetailCtrl', function($rootScope, $scope){
   $scope.$on('screeningSelected', function(event, screening){
     $scope.screening = screening;
   });
@@ -80,8 +80,10 @@ angular.module('roomscreening.controllers.goals', [])
 
   if($stateParams.id != null){
     $scope.screening = LocalScreeningService.get($stateParams.id);
+    $scope.title = 'Doel Bewerken';
   } else {
     $scope.screening = {};
+    $scope.title = 'Nieuw Doel';
   }
 
   $scope.save = function(){

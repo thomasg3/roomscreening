@@ -55,11 +55,11 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
     views: {
       'overviewContent' : {
         templateUrl: 'templates/screening/overview.html',
-        controller: 'GoalOverviewCtrl'
+        controller: 'ScreeningOverviewCtrl'
       },
       'detailContent': {
         templateUrl: 'templates/screening/detail.html',
-        controller: 'ScreeningDetailController'
+        controller: 'ScreeningDetailCtrl'
       },
     }
   })
@@ -68,11 +68,11 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
     views: {
       'overviewContent' : {
         templateUrl: 'templates/screening/overview.html',
-        controller: 'ScreeningOverviewController'
+        controller: 'ScreeningOverviewCtrl'
       },
       'detailContent': {
         templateUrl: 'templates/screening/detail.html',
-        controller: 'ScreeningDetailController'
+        controller: 'ScreeningDetailCtrl'
       },
     }
   })
