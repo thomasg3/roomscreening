@@ -1,6 +1,14 @@
 angular.module('roomscreening.services', [])
   .constant('appAuthenticationToken', '1234DFSFSG5T6G678ISFDFEE2ZVBGJIK')
   .constant('baseURL', 'https://pxl.apexhealth.eu/ords/hopp/rs/api/')
+  .factory('httpAuthenticationInterceptor', function(appAuthenticationToken){
+    return {
+      request: function(config){
+        config.headers['Authentication'] = appAuthenticationToken;
+        return config;
+      }
+    }
+  })
   .factory('LocalScreeningService', function($localStorage) {
     var guid = function() {
       var S4 = function() {
@@ -29,7 +37,7 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('AccountService', function($rootScope, $localStorage, baseURL, $http, $rootScope) {
+  .factory('AccountService', function($localStorage, baseURL, $http) {
     return {
       //success = successful login, failure = failed to login, error = some kind of error occured
       login: function(email, password, success, failure ,error) {
@@ -57,6 +65,24 @@ angular.module('roomscreening.services', [])
       logout: function() {
          $localStorage.currentUser = {};
          $localStorage.loggedIn = false;
+      }
+    }
+  })
+  .factory('ClientService', function($localStorage, baseURL, $http){
+    return {
+      getAll: function(success, failure){
+        $http.get(baseURL+'clients').then(function(response){
+          $localStorage.clients = {};
+          response.data.items.forEach(function(client){
+            $localStorage.clients[client.id] = client;
+          });
+          success(response.data.items);
+        }, function(response) {
+          failure(response)
+        })
+      },
+      get: function(id){
+          return $localStorage.clients[id];
       }
     }
   })

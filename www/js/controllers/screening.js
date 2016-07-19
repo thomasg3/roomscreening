@@ -12,6 +12,8 @@ angular.module('roomscreening.controllers.goals', [])
     $scope.screeningsArray = array($scope.screenings);
   }
 
+  $scope.$watch('screenings', reset, true);
+
   $scope.select = function(id){
     $scope.selectedId = id;
     $rootScope.$broadcast('screeningSelected', $scope.screenings[id]);
@@ -60,26 +62,25 @@ angular.module('roomscreening.controllers.goals', [])
   reset();
 })
 
-.controller('ScreeningDetailCtrl', function($rootScope, $scope){
+.controller('ScreeningDetailCtrl', function($rootScope, $scope, ClientService){
   $scope.$on('screeningSelected', function(event, screening){
     $scope.screening = screening;
   });
   $rootScope.$broadcast('screeningDetailReady');
 })
 
-.controller('ScreeningEditController', function($scope, LocalScreeningService, $state, $stateParams,$ionicHistory){
-  $scope.clients = [
-    {name: "Zorro"},
-    {name: "Curt"},
-    {name: "Alice"},
-    {name: "Bob"},
-    {name: "Denise"},
-    {name: "Engelbert"},
-    {name: "Fons"}
-  ];
+.controller('ScreeningEditController', function($scope, LocalScreeningService, $state, $stateParams,$ionicHistory, ClientService, $ionicLoading){
+  $ionicLoading.show();
+  ClientService.getAll(function(clients){
+    $scope.clients = clients;
+    $ionicLoading.hide();
+  }, function(error){
+    $scope.clients = [];
+    $ionicLoading.hide();
+  })
 
   if($stateParams.id != null){
-    $scope.screening = LocalScreeningService.get($stateParams.id);
+    $scope.screening = angular.copy(LocalScreeningService.get($stateParams.id));
     $scope.title = 'Doel Bewerken';
   } else {
     $scope.screening = {};

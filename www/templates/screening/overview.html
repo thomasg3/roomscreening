@@ -16,7 +16,7 @@
       on-swipe-right="swipeRight()"
       on-swipe-left="swipeLeft()">
         <ion-delete-button class="ion-minus-circled" ng-click="remove(screening.id)"></ion-delete-button>
-        {{screening.client_name}}
+        {{screening.client.initials}}
         <span class="item-note">
           {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
         </span>

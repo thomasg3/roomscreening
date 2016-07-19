@@ -23,7 +23,8 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
     $localStorage = $localStorage.$default({
       currentUser: {},
       loggedIn: false,
-      screenings: {}
+      screenings: {},
+      clients: {}
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
@@ -37,7 +38,8 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+  $httpProvider.interceptors.push('httpAuthenticationInterceptor');
   $stateProvider
   .state('login', {
     url: '/login',
@@ -91,4 +93,7 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
-});
+})
+
+
+;

@@ -11,31 +11,22 @@
       <!-- Title -->
       <div class="row">
         <div class="col text-center">
-          <h1 class="dark">{{screening.client_name}}</h1>
+          <h1 class="dark">{{screening.client.initials}}</h1>
         </div>
       </div>
 
       <!-- Properties -->
-      <div class="row">
-        <div class="col text-right">
-          <p> In bijzijn van: </p>
-          <p> Soort van woning: </p>
-          <p> Woonsituatie: </p>
-          <p> Aanwezige hulp: </p>
-          <p> Loophulpmiddelen: </p>
-          <p> Bijzonderheden: </p>
+      <div class="card">
+        <div class="item item-divider">
+          Doel
         </div>
-        <div class="col"> <p> {{screening.companions}} </p>
-          <p> {{screening.house_type}} </p>
-          <p> {{screening.living_situation}} </p>
-          <p> {{screening.aid}} </p>
-          <p> {{screening.walking_aid}} </p>
-          <p> {{screening.particularities}} </p>
+        <div class="item item-text-wrap">
+          {{screening.goal}}
         </div>
       </div>
 
       <!-- List of rooms -->
-      <ion-list>
+      <ion-list class="list card">
         <ion-item collection-repeat="room in screening.rooms">
           {{room.name}}
           <span class="item-note">
