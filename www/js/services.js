@@ -86,5 +86,8 @@ angular.module('roomscreening.services', [])
       }
     }
   })
+  .factory('StructureService', function(baseURL, $resource){
+    return $resource(baseURL+'structure');
+  })
 
 ;
