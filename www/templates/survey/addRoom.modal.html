@@ -1,0 +1,14 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Ruimte Toevoegen</h1>
+    <button class="button button-clear icon-left ion-close" ng-click="hideAddRoom()">Sluiten</button>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-icon-left" ng-repeat="room in structure.rooms" ng-click="addRoom(room)">
+        <i class="icon {{convert(room)}}"></i>
+        {{room.room}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-modal-view>

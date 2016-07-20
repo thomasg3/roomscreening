@@ -1,0 +1,27 @@
+<ion-view>
+  <ion-header-bar class="bar-positive">
+    <a class="button button-clear icon-left ion-android-arrow-back" href="#/app/screenings" nav-direction="back">Terug</a>
+    <h1 class="title">Ruimtes</h1>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-icon-left item-balanced" ng-click="showAddRoom()">
+        <i class="icon ion-plus-circled"></i>
+        Ruimte Toevoegen
+      </ion-item>
+
+      <ion-item ng-repeat="room in screening.rooms" class="item-icon-left item-icon-right">
+        <i class="icon {{convert(room)}}"></i>
+        {{room.room}}
+        <i class="icon ion-chevron-right"></i>
+      </ion-item>
+
+      <ion-item ng-if="!screening.rooms.length" class="item-icon-left item-icon-right item-text-wrap text-center">
+        <i class="icon ion-arrow-up-a"></i>
+        <h2>Geen Ruimtes</h2>
+        <p>Maak een Ruimte aan.</p>
+        <i class="icon ion-arrow-up-a"></i>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

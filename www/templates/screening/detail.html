@@ -28,7 +28,7 @@
       <!-- List of rooms -->
       <ion-list class="list card">
         <ion-item collection-repeat="room in screening.rooms">
-          {{room.name}}
+          {{room.room}}
           <span class="item-note">
             {{room.issues}}
             <span ng-if="room.issues == 1">
@@ -43,9 +43,9 @@
 
       <!-- Action buttons -->
       <div ng-if="screening.rooms && !screening.rooms.length">
-        <button class=" button button-full button-large button-balanced icon-center ion-play">
+        <a class=" button button-full button-large button-balanced icon-center ion-play" href="#/survey/survey/{{screening.id}}" nav-direction="forward">
            Screening Starten
-        </button>
+        </a>
       </div>
       <div ng-if="screening.rooms && screening.rooms.length">
         <button class=" button button-full button-large icon-center ion-play">

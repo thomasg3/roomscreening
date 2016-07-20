@@ -88,6 +88,30 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
     templateUrl: 'templates/screening/edit.html',
     controller: 'ScreeningEditController'
   })
+  .state('survey', {
+    url: '/survey',
+    abstract: true,
+    templateUrl: 'templates/overviewDetail.html'
+  })
+  .state('survey.survey', {
+    url: '/survey/:screeningId',
+    cache: false,
+    views: {
+      'overviewContent' : {
+        templateUrl: 'templates/survey/overview.html',
+        controller: 'SurveyOverviewCtrl'
+      },
+      'detailContent': {
+        templateUrl: 'templates/survey/detail.html',
+        controller: 'SurveyDetailCtrl'
+      }
+    }
+  })
+  .state('surveytest',{
+    url: '/surveytest',
+    templateUrl: 'templates/survey/survey.html',
+    controller: 'TestCtrl'
+  })
 
 
 
