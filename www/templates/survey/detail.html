@@ -1,7 +1,27 @@
 <ion-view>
+  <ion-nav-title>{{room.room}}</ion-nav-title>
   <ion-content>
-    <pre>
-      {{structure | json}}
-    </pre>
+    <ion-list>
+      <div ng-repeat="category in structure.categories | categoriesFilter:room.room_id | orderBy:order_nr">
+        <ion-checkbox class="item-divider">
+          {{category.category}}
+        </ion-checkbox>
+        <ion-list>
+          <div ng-repeat="item in structure.items | itemFilter:room.room_id:category.category_id | orderBy:order_nr">
+            <ion-checkbox class="">
+              {{item.item}}
+            </ion-checkbox>
+            <div class="col-offset-10">
+              <ion-list class="">
+                <div ng-repeat="sub_item in structure.sub_items | subitemFilter:room.room_id:category.category_id:item.item_id | orderBy:order_nr">
+                  <ion-checkbox class="">
+                    {{sub_item.sub_item}}
+                  </ion-checkbox>
+                </div>
+              </ion-list>
+            </div>
+          </div>
+        </ion-list>
+    </ion-list>
   </ion-content>
 </ion-view>

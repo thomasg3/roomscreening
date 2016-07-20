@@ -10,7 +10,12 @@
         Ruimte Toevoegen
       </ion-item>
 
-      <ion-item ng-repeat="room in screening.rooms" class="item-icon-left item-icon-right">
+      <ion-item
+        ng-repeat="room in screening.rooms track by $index"
+        class="item-icon-left item-icon-right"
+        ng-class="{'item-dark': isSelected($index)}"
+        ng-click="select($index)"
+        >
         <i class="icon {{convert(room)}}"></i>
         {{room.room}}
         <i class="icon ion-chevron-right"></i>

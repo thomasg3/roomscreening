@@ -48,9 +48,9 @@
         </a>
       </div>
       <div ng-if="screening.rooms && screening.rooms.length">
-        <button class=" button button-full button-large icon-center ion-play">
+        <a class=" button button-full button-large icon-center ion-play" href="#/survey/survey/{{screening.id}}" nav-direction="forward">
            Screening Hervatten
-        </button>
+        </a>
         <button class="button button-full button-large icon-center ion-checkmark">
           Screening Afwerken
         </button>
