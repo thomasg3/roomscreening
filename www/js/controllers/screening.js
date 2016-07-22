@@ -62,15 +62,23 @@ angular.module('roomscreening.controllers.goals', [])
   reset();
 })
 
-.controller('ScreeningDetailCtrl', function($rootScope, $scope, ClientService){
+.controller('ScreeningDetailCtrl', function($rootScope, $scope, ClientService, $ionicPopup){
   $scope.$on('screeningSelected', function(event, screening){
     $scope.screening = screening;
   });
   $rootScope.$broadcast('screeningDetailReady');
   $scope.complete = function(screening){
     if($scope.screening.rooms && $scope.screening.rooms.length){
-      $scope.screening.last_edit = new Date();
-      $scope.screening.complete = true;
+      var confirmPopup = $ionicPopup.confirm({
+        title: "Screening Afwerken",
+        template: "Bent u zeker dat u deze Screening wilt afwerken? U kan deze <b>Screening niet meer aanpassen</b> na deze actie.",
+        cancelText: 'Annuleer'
+      }).then(function (confirmed) {
+        if(confirmed){
+          $scope.screening.last_edit = new Date();
+          $scope.screening.complete = true;
+        }
+      });
     }
   }
 })
@@ -99,7 +107,7 @@ angular.module('roomscreening.controllers.goals', [])
       LocalScreeningService.update($scope.screening);
       var id = $stateParams.id;
     } else {
-      $scope.screening.rooms = [];
+      $scope.screening.rooms = [{name:"Inkom", issues:2}];
       var id = LocalScreeningService.add($scope.screening);
     }
     $ionicHistory.nextViewOptions({
