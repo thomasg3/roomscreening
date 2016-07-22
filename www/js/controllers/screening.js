@@ -107,7 +107,7 @@ angular.module('roomscreening.controllers.goals', [])
       LocalScreeningService.update($scope.screening);
       var id = $stateParams.id;
     } else {
-      $scope.screening.rooms = [{name:"Inkom", issues:2}];
+      $scope.screening.rooms = [];
       var id = LocalScreeningService.add($scope.screening);
     }
     $ionicHistory.nextViewOptions({
