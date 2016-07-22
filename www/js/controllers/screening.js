@@ -67,6 +67,12 @@ angular.module('roomscreening.controllers.goals', [])
     $scope.screening = screening;
   });
   $rootScope.$broadcast('screeningDetailReady');
+  $scope.complete = function(screening){
+    if($scope.screening.rooms && $scope.screening.rooms.length){
+      $scope.screening.last_edit = new Date();
+      $scope.screening.complete = true;
+    }
+  }
 })
 
 .controller('ScreeningEditController', function($scope, LocalScreeningService, $state, $stateParams,$ionicHistory, ClientService, $ionicLoading){

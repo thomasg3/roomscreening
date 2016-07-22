@@ -42,18 +42,20 @@
       </ion-list>
 
       <!-- Action buttons -->
-      <div ng-if="screening.rooms && !screening.rooms.length">
-        <button class=" button button-full button-large button-balanced icon-center ion-play">
-           Screening Starten
-        </button>
-      </div>
-      <div ng-if="screening.rooms && screening.rooms.length">
-        <button class=" button button-full button-large icon-center ion-play">
-           Screening Hervatten
-        </button>
-        <button class="button button-full button-large icon-center ion-checkmark">
-          Screening Afwerken
-        </button>
+      <div ng-if="!screening.complete && screening.rooms">
+        <div ng-if="screening.rooms && !screening.rooms.length">
+          <button class=" button button-full button-large button-balanced icon-center ion-play">
+             Screening Starten
+          </button>
+        </div>
+        <div ng-if="screening.rooms && screening.rooms.length">
+          <button class=" button button-full button-large icon-center ion-play">
+             Screening Hervatten
+          </button>
+          <button class="button button-full button-large icon-center ion-checkmark" ng-click="complete(screening)">
+            Screening Afwerken
+          </button>
+        </div>
       </div>
     </ion-content>
 

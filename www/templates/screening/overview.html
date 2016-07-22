@@ -11,11 +11,12 @@
 
       <ion-item
       ng-repeat="screening in screeningsArray | orderBy: '-last_edit'"
-      ng-class="{'item-dark': isSelected(screening.id)}"
+      ng-class="{'item-dark': isSelected(screening.id) , 'item-positive': screening.complete, 'item-icon-left': screening.complete}"
       ng-click="select(screening.id)"
       on-swipe-right="swipeRight()"
       on-swipe-left="swipeLeft()">
         <ion-delete-button class="ion-minus-circled" ng-click="remove(screening.id)"></ion-delete-button>
+        <i class="icon ion-checkmark" ng-if="screening.complete"></i>
         {{screening.client.initials}}
         <span class="item-note">
           {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
