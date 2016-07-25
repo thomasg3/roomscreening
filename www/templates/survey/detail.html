@@ -11,7 +11,7 @@
           </button>
           <b>{{category.category}}</b>
         </ion-item>
-        <rs-issue issue="getIssue(room.room_id, category.category_id)" ng-if="hasIssue(room.room_id, category.category_id)"></rs-issue>
+        <rs-issue issue="getIssue(room.room_id, category.category_id)" kinds="kinds" ng-if="hasIssue(room.room_id, category.category_id)"></rs-issue>
         <!--
         <ion-list>
           <div ng-repeat="item in structure.items | itemFilter:room.room_id:category.category_id | orderBy:order_nr">

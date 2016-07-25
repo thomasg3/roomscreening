@@ -5,8 +5,9 @@ angular.module('roomscreening.directives', [])
       templateUrl: 'templates/survey/issue.html',
       scope: {
         issue: '=',
+        kinds: '=',
       },
-      controller: 'IssueCtrl'
+      controller: 'IssueCtrl',
     }
   })
 ;

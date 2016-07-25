@@ -8,7 +8,7 @@ angular.module('roomscreening.controllers.survey', [])
   })
 
 
-  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams){
+  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService){
     StructureService.get(function(structure){
       $scope.structure = structure;
     }, function(error){
@@ -21,6 +21,11 @@ angular.module('roomscreening.controllers.survey', [])
     $scope.$on('roomIndexSelected', function(event, index){
       $scope.room = $scope.screening.rooms[index];
     });
+    KindOfIssueService.get(function(kinds){
+      $scope.kinds = kinds;
+    }, function(error){
+      $log.error(error);
+    })
 
     $scope.hasIssue = function(roomId, categoryId, itemId, subItemId){
         return $scope.screening.issues.some(function(issue){
@@ -74,6 +79,14 @@ angular.module('roomscreening.controllers.survey', [])
     if($scope.issue == null){
       $log.error("IssueCtrl did not receive an issue from it's directive");
     }
+    if($scope.kinds == null){
+      $log.error("IssueCtrl did not receive kinds from it's directive");
+    }
+    $ionicPopover.fromTemplateUrl('templates/survey/kinds.popover.html', {
+      scope: $scope,
+    }).then(function(popover){
+      $scope.kindsPopover = popover;
+    })
 
     $scope.toggleApplicable = function(){
       $scope.issue.not_applicable = !$scope.issue.not_applicable;
@@ -85,6 +98,10 @@ angular.module('roomscreening.controllers.survey', [])
 
     $scope.toggleCareGiver = function(){
       $scope.issue.issue_care_giver = !$scope.issue.issue_care_giver
+    }
+
+    $scope.showKinds = function($event){
+      $scope.kindsPopover.show($event);
     }
 
 

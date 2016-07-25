@@ -99,6 +99,17 @@ angular.module('roomscreening.services', [])
       }
     };
   })
+  .factory('KindOfIssueService', function(baseURL, $http){
+    return {
+      get: function(success, error){
+        $http.get(baseURL+'sort_issues').then(function(response){
+          success(response.data.items);
+        }, function(response){
+          error(response);
+        })
+      }
+    }
+  })
   .factory('RoomToIconService', function(){
     var dictionary = {
       "Algemeen": "ion-home",
