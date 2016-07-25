@@ -24,12 +24,12 @@
     </div>
   </div>
   <div class="row">
-    <h4 ng-click="showKinds($event)">Soort: FA, BS</h4>
+    <h4 ng-click="showKinds($event)">Soort: <span ng-repeat="sort in issue.sort_issues | orderBy:'toString()' ">{{sort}} <span ng-if="!$last">,</span> </span></h4>
   </div>
   <div class="row">
     <div class="col">
       <label class="item item-input">
-        <textarea  placeholder="Opmerkingen"></textarea>
+        <textarea ng-model="issue.description"  placeholder="Opmerkingen"></textarea>
       </label>
     </div>
   </div>

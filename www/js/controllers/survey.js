@@ -82,6 +82,9 @@ angular.module('roomscreening.controllers.survey', [])
     if($scope.kinds == null){
       $log.error("IssueCtrl did not receive kinds from it's directive");
     }
+    if($scope.issue.sort_issues == null){
+      $scope.issue.sort_issues = [];
+    }
     $ionicPopover.fromTemplateUrl('templates/survey/kinds.popover.html', {
       scope: $scope,
     }).then(function(popover){
@@ -102,6 +105,18 @@ angular.module('roomscreening.controllers.survey', [])
 
     $scope.showKinds = function($event){
       $scope.kindsPopover.show($event);
+    }
+
+    $scope.toggleKind = function(sortIssue){
+      if($scope.hasKind(sortIssue)){
+        $scope.issue.sort_issues.splice($scope.issue.sort_issues.indexOf(sortIssue), 1);
+      } else {
+        $scope.issue.sort_issues.push(sortIssue);
+      }
+    }
+
+    $scope.hasKind = function(sortIssue){
+      return $scope.issue.sort_issues.indexOf(sortIssue) != -1;
     }
 
 
