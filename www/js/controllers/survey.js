@@ -8,7 +8,7 @@ angular.module('roomscreening.controllers.survey', [])
   })
 
 
-  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService){
+  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup){
     StructureService.get(function(structure){
       $scope.structure = structure;
     }, function(error){
@@ -55,11 +55,19 @@ angular.module('roomscreening.controllers.survey', [])
     }
 
     $scope.removeIssue = function(roomId, categoryId, itemId, subItemId){
-      $scope.screening.issues = $scope.screening.issues.filter(function(issue){
-        return !(issue.room_id == roomId
-          && issue.category_id == categoryId
-          && (itemId == null || issue.item_id == itemId)
-          && (subItemId == null || issue.sub_item_id == subItemId));
+      $ionicPopup.confirm({
+        title: "Hindernis verwijderen",
+        template: "Bent u zeker dat u deze hindernis wilt verwijderen? Alle ingegeven gegevens voor deze hindernis zijn dan verloren.",
+        cancelText: "Annuleer"
+      }).then(function(confirmed){
+        if(confirmed){
+          $scope.screening.issues = $scope.screening.issues.filter(function(issue){
+            return !(issue.room_id == roomId
+              && issue.category_id == categoryId
+              && (itemId == null || issue.item_id == itemId)
+              && (subItemId == null || issue.sub_item_id == subItemId));
+          })
+        }
       })
     }
 
