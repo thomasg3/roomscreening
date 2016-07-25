@@ -4,8 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova' ,'roomscreening.controllers', 'roomscreening.services'])
-
+angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreening.controllers', 'roomscreening.services', 'roomscreening.filters', 'roomscreening.directives'])
 .run(function($ionicPlatform, $localStorage, $rootScope, $state, $log) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -96,6 +95,30 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova' ,'roomscreeni
     url: '/screenings/edit/:id',
     templateUrl: 'templates/screening/edit.html',
     controller: 'ScreeningEditController'
+  })
+  .state('survey', {
+    url: '/survey',
+    abstract: true,
+    templateUrl: 'templates/overviewDetail.html'
+  })
+  .state('survey.survey', {
+    url: '/survey/:screeningId',
+    cache: false,
+    views: {
+      'overviewContent' : {
+        templateUrl: 'templates/survey/overview.html',
+        controller: 'SurveyOverviewCtrl'
+      },
+      'detailContent': {
+        templateUrl: 'templates/survey/detail.html',
+        controller: 'SurveyDetailCtrl'
+      }
+    }
+  })
+  .state('surveytest',{
+    url: '/surveytest',
+    templateUrl: 'templates/survey/survey.html',
+    controller: 'TestCtrl'
   })
 
 

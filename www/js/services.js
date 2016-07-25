@@ -109,5 +109,52 @@ angular.module('roomscreening.services', [])
       }
     }
   })
+  .factory('StructureService', function(baseURL, $http){
+    return {
+      get: function(success, error){
+        $http.get(baseURL+'structure').then(function(response){
+          var structure = response.data.items[0];
+          structure.lastUpdated = new Date();
+          success(structure);
+        }, function(response){
+            error(response);
+        })
+      }
+    };
+  })
+  .factory('KindOfIssueService', function(baseURL, $http){
+    return {
+      get: function(success, error){
+        $http.get(baseURL+'sort_issues').then(function(response){
+          success(response.data.items);
+        }, function(response){
+          error(response);
+        })
+      }
+    }
+  })
+  .factory('RoomToIconService', function(){
+    var dictionary = {
+      "Algemeen": "ion-home",
+      "Badkamer": "ion-android-favorite-outline",
+      "Bergruimte": "ion-android-checkbox-outline-blank",
+      "Communicatiemedia": "ion-android-call",
+      "Eetkamer": "ion-android-restaurant",
+      "Hal": "ion-help-buoy",
+      "Hor. Circul.": "ion-arrow-swap",
+      "Inkom": "ion-android-exit",
+      "Keuken": "ion-pizza",
+      "Salon": "ion-android-bar",
+      "Slaapkamer": "ion-android-alarm-clock",
+      "Terras": "ion-android-sunny",
+      "Veranda": "ion-android-cloud-outline",
+      "Vert. Circul.": "ion-arrow-up-c"
+    }
+    return {
+      convert: function(roomName){
+        return dictionary[roomName] || "ion-home";
+      }
+    }
+  })
 
 ;

@@ -4,23 +4,41 @@
   </ion-header-bar>
   <ion-content>
     <ion-list show-delete="showDelete">
-      <ion-item class="icon-item-left item-balanced" href="#/screenings/edit" nav-direction="forward">
+      <ion-item class="item-icon-left item-balanced" href="#/screenings/edit" nav-direction="forward">
         <i class="icon ion-plus-circled"></i>
         Doel Toevoegen
       </ion-item>
 
       <ion-item
-      ng-repeat="screening in screeningsArray | orderBy: '-last_edit'"
-      ng-class="{'item-dark': isSelected(screening.id)}"
+      ng-repeat="screening in screeningsArray | filter:{'complete': false}"
+      ng-class="{'item-dark': isSelected(screening.id) , 'item-positive': screening.complete, 'item-icon-left': screening.complete}"
       ng-click="select(screening.id)"
       on-swipe-right="swipeRight()"
       on-swipe-left="swipeLeft()">
-        <ion-delete-button class="ion-minus-circled" ng-click="remove(screening.id)"></ion-delete-button>
+        <ion-delete-button class="ion-trash-a" ng-click="remove(screening.id)"></ion-delete-button>
+        <i class="icon ion-checkmark" ng-if="screening.complete"></i>
         {{screening.client.initials}}
         <span class="item-note">
           {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
         </span>
       </ion-item>
+
+      <ion-item class="item-divider" ng-show="(screeningsArray | filter:{'complete':true}).length">Afgewerkte Doelen</ion-item>
+      <ion-item
+      ng-repeat="screening in screeningsArray | filter:{'complete': true}"
+      ng-class="{'item-dark': isSelected(screening.id) , 'item-positive': screening.complete, 'item-icon-left': screening.complete}"
+      ng-click="select(screening.id)"
+      on-swipe-right="swipeRight()"
+      on-swipe-left="swipeLeft()">
+        <ion-delete-button class="ion-trash-a" ng-click="remove(screening.id)"></ion-delete-button>
+        <i class="icon ion-checkmark" ng-if="screening.complete"></i>
+        {{screening.client.initials}}
+        <span class="item-note">
+          {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
+        </span>
+      </ion-item>
+
+
 
       <ion-item ng-if="!screeningsArray.length" class="item-icon-left item-icon-right item-text-wrap text-center">
         <i class="icon ion-arrow-up-a"></i>
@@ -28,7 +46,6 @@
         <p>Maak een nieuwe Doel aan.</p>
         <i class="icon ion-arrow-up-a"></i>
       </ion-item>
-
     </ion-list>
   </ion-content>
   <ion-footer-bar class="wrap-text">
