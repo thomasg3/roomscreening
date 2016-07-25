@@ -23,7 +23,7 @@
         </span>
       </ion-item>
 
-      <ion-item class="item-divider">Afgewerkte Doelen</ion-item>
+      <ion-item class="item-divider" ng-show="(screeningsArray | filter:{'complete':true}).length">Afgewerkte Doelen</ion-item>
       <ion-item
       ng-repeat="screening in screeningsArray | filter:{'complete': true}"
       ng-class="{'item-dark': isSelected(screening.id) , 'item-positive': screening.complete, 'item-icon-left': screening.complete}"
