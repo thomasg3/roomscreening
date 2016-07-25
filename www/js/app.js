@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controllers', 'roomscreening.services'])
+angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controllers', 'roomscreening.services', 'roomscreening.filters', 'roomscreening.directives'])
 
 .run(function($ionicPlatform, $localStorage, $rootScope, $state) {
   $ionicPlatform.ready(function() {
