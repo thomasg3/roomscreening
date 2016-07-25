@@ -147,9 +147,9 @@ angular.module('roomscreening.controllers.survey', [])
       return RoomToIconService.convert(room.room);
     }
 
-    $scope.showAddRoom = function(){$scope.addRoomModal.show();}
-    $scope.hideAddRoom = function(){$scope.addRoomModal.hide();}
-    $scope.addRoom = function(room){$scope.screening.rooms.push(angular.copy(room)); $scope.hideAddRoom();}
+    $scope.showAddRoom = function(){$scope.addRoomModal.show();};
+    $scope.hideAddRoom = function(){$scope.addRoomModal.hide();};
+    $scope.addRoom = function(room){$scope.screening.rooms.push(angular.copy(room)); $scope.hideAddRoom(); $scope.select($scope.screening.rooms.length-1);};
 
     $scope.select = function(index){
       selectedIndex = index;
