@@ -1,15 +1,30 @@
 <div class="col-offset-10">
   <div class="row">
     <div class="col">
-      <button class="button button-clear button-stable">Afwezig</button>
+      <button
+        class="button button-clear"
+        ng-class="{'button-stable': !issue.not_applicable, 'button-assertive': issue.not_applicable}"
+        ng-click="toggleApplicable()">
+        Afwezig
+      </button>
     </div>
     <div class="col text-right">
-      <button class="button button-clear button-stable">Client</button>
-      <button class="button button-clear button-stable">MantelZorger</button>
+      <button
+        class="button button-clear"
+        ng-class="{'button-stable': !issue.issue_client, 'button-assertive': issue.issue_client}"
+        ng-click="toggleClient()">
+        Client
+      </button>
+      <button
+        class="button button-clear"
+        ng-class="{'button-stable': !issue.issue_care_giver, 'button-assertive': issue.issue_care_giver}"
+        ng-click="toggleCareGiver()">
+        MantelZorger
+      </button>
     </div>
   </div>
   <div class="row">
-    <h4>Soort: FA, BS</h4>
+    <h4 ng-click="showKinds()">Soort: FA, BS</h4>
   </div>
   <div class="row">
     <div class="col">

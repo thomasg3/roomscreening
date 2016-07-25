@@ -70,6 +70,26 @@ angular.module('roomscreening.controllers.survey', [])
 
   })
 
+  .controller('IssueCtrl', function($scope, $log, $ionicPopover){
+    if($scope.issue == null){
+      $log.error("IssueCtrl did not receive an issue from it's directive");
+    }
+
+    $scope.toggleApplicable = function(){
+      $scope.issue.not_applicable = !$scope.issue.not_applicable;
+    }
+
+    $scope.toggleClient = function(){
+      $scope.issue.issue_client = !$scope.issue.issue_client;
+    }
+
+    $scope.toggleCareGiver = function(){
+      $scope.issue.issue_care_giver = !$scope.issue.issue_care_giver
+    }
+
+
+  })
+
 
   .controller('SurveyOverviewCtrl', function($scope, $stateParams, LocalScreeningService, $ionicModal,StructureService, RoomToIconService, $rootScope, $ionicPopup){
     var selectedIndex;

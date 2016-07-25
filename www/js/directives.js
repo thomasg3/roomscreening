@@ -4,12 +4,9 @@ angular.module('roomscreening.directives', [])
       restrict: 'E',
       templateUrl: 'templates/survey/issue.html',
       scope: {
-        screening: '=',
-        roomId: '=',
-        categoryId: '=',
-        itemId: '=',
-        subItemId: '='
-      }
+        issue: '=',
+      },
+      controller: 'IssueCtrl'
     }
   })
 ;
