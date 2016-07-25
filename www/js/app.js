@@ -34,12 +34,14 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
     });
 
     $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-      $log.warn(networkState);
+      $log.warn("Network",networkState);
     })
 
     $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-      $log.warn(networkState);
+      $log.warn("Network",networkState);
     })
+
+    $log.warn("Starting...");
 
 
   });
@@ -71,7 +73,8 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
         templateUrl: 'templates/screening/detail.html',
         controller: 'ScreeningDetailCtrl'
       },
-    }
+    },
+    cache: false
   })
   .state('app.specific_screening', {
     url: '/screenings/:id',

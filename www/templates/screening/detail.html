@@ -1,7 +1,7 @@
 <ion-view>
 
     <ion-nav-buttons side="right">
-      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward" ng-if="screening">
+      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward" ng-if="screening && !screening.complete">
         <i class="icon ion-edit"></i>
         Bewerken
       </a>
@@ -25,22 +25,6 @@
         </div>
       </div>
 
-      <!-- List of rooms -->
-      <ion-list class="list card">
-        <ion-item collection-repeat="room in screening.rooms">
-          {{room.room}}
-          <span class="item-note">
-            {{numberOfIssues(screening, room)}}
-            <span ng-if="numberOfIssues(screening, room) == 1">
-              hindernis
-            </span>
-            <span ng-if="numberOfIssues(screening, room) != 1">
-              hindernissen
-            </span>
-          </span>
-        </ion-item>
-      </ion-list>
-
       <!-- Action buttons -->
       <div ng-if="!screening.complete && screening.rooms">
         <div ng-if="screening.rooms && !screening.rooms.length">
@@ -57,6 +41,23 @@
           </button>
         </div>
       </div>
+
+      <!-- List of rooms -->
+      <ion-list class="list card">
+        <ion-item collection-repeat="room in screening.rooms">
+          {{room.room}}
+          <span class="item-note">
+            {{numberOfIssues(screening, room)}}
+            <span ng-if="numberOfIssues(screening, room) == 1">
+              hindernis
+            </span>
+            <span ng-if="numberOfIssues(screening, room) != 1">
+              hindernissen
+            </span>
+          </span>
+        </ion-item>
+      </ion-list>
+
     </ion-content>
 
     <!-- Footer -->
