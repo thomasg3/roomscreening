@@ -26,7 +26,7 @@ angular.module('roomscreening.controllers.goals', [])
   $scope.$on('screeningDetailReady', function(){
     if($stateParams.id != null){
       $scope.select($stateParams.id);
-    } else if($scope.screeningsArray.length) {
+    } else if($scope.screeningsArray != null && $scope.screeningsArray.length) {
       $scope.select($scope.screeningsArray[0].id);
     }
   });

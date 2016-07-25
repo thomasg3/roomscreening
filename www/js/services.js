@@ -9,6 +9,27 @@ angular.module('roomscreening.services', [])
       }
     }
   })
+  .factory('httpLogginInterceptor', function($log, $q){
+    return {
+      request: function(config){
+        //$log.debug("HTTP Request: "+angular.toJson(config, false));
+        return config;
+      },
+      response: function(response){
+        //$log.debug("HTTP Response: "+angular.toJson(response, false));
+        return response;
+      },
+      requestError: function(rejectReason){
+        $log.error("HTTP Request: "+angular.toJson(rejectReason, false));
+        return $q.reject(rejectReason);
+      },
+      responseError: function(response){
+        $log.error("HTTP Response: "+angular.toJson(response, false));
+        return $q.reject(response);
+      }
+
+    }
+  })
   .factory('LocalScreeningService', function($localStorage) {
     var guid = function() {
       var S4 = function() {
@@ -37,7 +58,7 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('AccountService', function($localStorage, baseURL, $http) {
+  .factory('AccountService', function($localStorage, baseURL, $http, $log) {
     return {
       //success = successful login, failure = failed to login, error = some kind of error occured
       login: function(email, password, success, failure ,error) {
@@ -55,10 +76,12 @@ angular.module('roomscreening.services', [])
               $localStorage.loggedIn = true;
               success();
             } else {
+              $log.warn("Login", angular.toJson(response));
               failure();
             }
           }
         }, function(response) {
+          $log.error("Login", angular.toJson(response));
           error();
         });
       },

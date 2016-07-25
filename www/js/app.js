@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controllers', 'roomscreening.services'])
+angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova' ,'roomscreening.controllers', 'roomscreening.services'])
 
-.run(function($ionicPlatform, $localStorage, $rootScope, $state) {
+.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -32,6 +32,14 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
         event.preventDefault();
         $state.go('login');
       }
+    });
+
+    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+      $log.warn(networkState);
+    })
+
+    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+      $log.warn(networkState);
     })
 
 
@@ -40,6 +48,7 @@ angular.module('roomscreening', ['ionic', 'ngStorage' ,'roomscreening.controller
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   $httpProvider.interceptors.push('httpAuthenticationInterceptor');
+  $httpProvider.interceptors.push('httpLogginInterceptor');
   $stateProvider
   .state('login', {
     url: '/login',
