@@ -24,7 +24,13 @@
     </div>
   </div>
   <div class="row">
-    <h4 ng-click="showKinds($event)">Soort: <span ng-repeat="sort in issue.sort_issues | orderBy:'toString()' ">{{sort}} <span ng-if="!$last">,</span> </span></h4>
+    <h4 ng-click="showKinds($event)">
+      Soort:
+      <span ng-repeat="sort in issue.sort_issues | orderBy:'toString()' ">
+        {{sort}} <span ng-if="!$last">,</span>
+      </span>
+      <span ng-hide="issue.sort_issues.length">/</span>
+    </h4>
   </div>
   <div class="row">
     <div class="col">

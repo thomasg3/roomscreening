@@ -30,11 +30,11 @@
         <ion-item collection-repeat="room in screening.rooms">
           {{room.room}}
           <span class="item-note">
-            {{room.issues}}
-            <span ng-if="room.issues == 1">
+            {{numberOfIssues(screening, room)}}
+            <span ng-if="numberOfIssues(screening, room) == 1">
               hindernis
             </span>
-            <span ng-if="room.issues != 1">
+            <span ng-if="numberOfIssues(screening, room) != 1">
               hindernissen
             </span>
           </span>

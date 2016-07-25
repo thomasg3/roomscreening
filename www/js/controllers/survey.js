@@ -27,21 +27,22 @@ angular.module('roomscreening.controllers.survey', [])
       $log.error(error);
     })
 
+    var isIssue = function(issue, roomId, categoryId, itemId, subItemId){
+      return issue.room_id == roomId
+        && issue.category_id == categoryId
+        && issue.item_id == itemId
+        && issue.sub_item_id == subItemId;
+    }
+
     $scope.hasIssue = function(roomId, categoryId, itemId, subItemId){
         return $scope.screening.issues.some(function(issue){
-          return issue.room_id == roomId
-            && issue.category_id == categoryId
-            && (itemId == null || issue.item_id == itemId)
-            && (subItemId == null || issue.sub_item_id == subItemId);
+            return isIssue(issue, roomId, categoryId, itemId, subItemId);
         });
     }
 
     $scope.getIssue = function(roomId, categoryId, itemId, subItemId){
         return $scope.screening.issues.filter(function(issue){
-          return issue.room_id == roomId
-            && issue.category_id == categoryId
-            && (itemId == null || issue.item_id == itemId)
-            && (subItemId == null || issue.sub_item_id == subItemId);
+          return isIssue(issue, roomId, categoryId, itemId, subItemId);
         })[0];
     }
 
@@ -62,10 +63,7 @@ angular.module('roomscreening.controllers.survey', [])
       }).then(function(confirmed){
         if(confirmed){
           $scope.screening.issues = $scope.screening.issues.filter(function(issue){
-            return !(issue.room_id == roomId
-              && issue.category_id == categoryId
-              && (itemId == null || issue.item_id == itemId)
-              && (subItemId == null || issue.sub_item_id == subItemId));
+            return !isIssue(issue, roomId, categoryId, itemId, subItemId);
           })
         }
       })

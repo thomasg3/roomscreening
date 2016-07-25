@@ -2,6 +2,7 @@
   <ion-nav-title>{{room.room}}</ion-nav-title>
   <ion-content>
     <ion-list>
+      <!-- CATEGORY -->
       <div ng-repeat="category in structure.categories | categoriesFilter:room.room_id | orderBy:order_nr">
         <ion-item class="item-button-left item-stable" ng-model="categoryShow[category.category_id]">
           <button
@@ -12,30 +13,37 @@
           <b>{{category.category}}</b>
         </ion-item>
         <rs-issue issue="getIssue(room.room_id, category.category_id)" kinds="kinds" ng-if="hasIssue(room.room_id, category.category_id)"></rs-issue>
-        <!--
         <ion-list>
+          <!-- ITEM -->
           <div ng-repeat="item in structure.items | itemFilter:room.room_id:category.category_id | orderBy:order_nr">
-            <ion-checkbox>
+            <ion-item class="item-button-left" ng-model="itemShow[category.category_id][item.item_id]">
+              <button
+                class="button icon button-clear"
+                ng-class="{'button-dark': !hasIssue(room.room_id,category.category_id,item.item_id), 'ion-android-radio-button-off': !hasIssue(room.room_id, category.category_id, item.item_id), 'ion-android-checkmark-circle': hasIssue(room.room_id, category.category_id, item.item_id), 'button-positive': hasIssue(room.room_id, category.category_id, item.item_id)}"
+                ng-click="toggleIssue(room.room_id, category.category_id, item.item_id, null)">
+              </button>
               {{item.item}}
-            </ion-checkbox>
-            <rs-issue screening="screening" room-id="room.room_id" category-id="category.category_id" ng-if="itemShow[item.item_id]"></rs-issue>
+            </ion-item>
+            <rs-issue issue="getIssue(room.room_id, category.category_id, item.item_id)" kinds="kinds" ng-if="hasIssue(room.room_id, category.category_id, item.item_id)"></rs-issue>
             <div class="col-offset-10">
               <ion-list>
+                <!-- SUBITEM -->
                 <div ng-repeat="sub_item in structure.sub_items | subitemFilter:room.room_id:category.category_id:item.item_id | orderBy:order_nr">
-                  <ion-checkbox ng-model="sub_itemShow[sub_item.sub_item_id]">
+                  <ion-item class="item-button-left" ng-model="subItemShow[category.category_id][item.item_id][sub_item.sub_item_id]">
+                    <button
+                      class="button icon button-clear"
+                      ng-class="{'button-dark': !hasIssue(room.room_id,category.category_id,item.item_id, sub_item.sub_item_id), 'ion-android-radio-button-off': !hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id), 'ion-android-checkmark-circle': hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id), 'button-positive': hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)}"
+                      ng-click="toggleIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)">
+                    </button>
                     {{sub_item.sub_item}}
-                  </ion-checkbox>
-                  <rs-issue screening="screening" room-id="room.room_id" category-id="category.category_id" ng-if="sub_itemShow[sub_item.sub_item_id]"></rs-issue>
+                  </ion-item>
+                  <rs-issue issue="getIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)" kinds="kinds" ng-if="hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)"></rs-issue>
                 </div>
               </ion-list>
             </div>
           </div>
         </ion-list>
-      -->
       </div>
     </ion-list>
-    <pre>
-      {{screening | json}}
-    </pre>
   </ion-content>
 </ion-view>
