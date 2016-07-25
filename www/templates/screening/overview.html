@@ -10,7 +10,7 @@
       </ion-item>
 
       <ion-item
-      ng-repeat="screening in screeningsArray | orderBy: '-last_edit'"
+      ng-repeat="screening in screeningsArray | filter:{'complete': false}"
       ng-class="{'item-dark': isSelected(screening.id) , 'item-positive': screening.complete, 'item-icon-left': screening.complete}"
       ng-click="select(screening.id)"
       on-swipe-right="swipeRight()"
@@ -23,13 +23,29 @@
         </span>
       </ion-item>
 
+      <ion-item class="item-divider">Afgewerkte Doelen</ion-item>
+      <ion-item
+      ng-repeat="screening in screeningsArray | filter:{'complete': true}"
+      ng-class="{'item-dark': isSelected(screening.id) , 'item-positive': screening.complete, 'item-icon-left': screening.complete}"
+      ng-click="select(screening.id)"
+      on-swipe-right="swipeRight()"
+      on-swipe-left="swipeLeft()">
+        <ion-delete-button class="ion-trash-a" ng-click="remove(screening.id)"></ion-delete-button>
+        <i class="icon ion-checkmark" ng-if="screening.complete"></i>
+        {{screening.client.initials}}
+        <span class="item-note">
+          {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
+        </span>
+      </ion-item>
+
+
+
       <ion-item ng-if="!screeningsArray.length" class="item-icon-left item-icon-right item-text-wrap text-center">
         <i class="icon ion-arrow-up-a"></i>
         <h2>Geen Doelen</h2>
         <p>Maak een nieuwe Doel aan.</p>
         <i class="icon ion-arrow-up-a"></i>
       </ion-item>
-
     </ion-list>
   </ion-content>
   <ion-footer-bar class="wrap-text">

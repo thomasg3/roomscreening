@@ -1,6 +1,6 @@
 angular.module('roomscreening.controllers.goals', [])
 
-.controller('ScreeningOverviewCtrl', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory){
+.controller('ScreeningOverviewCtrl', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory, $window){
   $ionicHistory.clearCache();
   $ionicHistory.clearHistory();
   var array = function(screenings){
@@ -9,8 +9,20 @@ angular.module('roomscreening.controllers.goals', [])
 
   var reset = function(){
     $scope.screenings = LocalScreeningService.getAll();
-    $scope.screeningsArray = array($scope.screenings);
+    $scope.screeningsArray = array($scope.screenings).sort(function(s1, s2){
+      var d1 = s1.last_edit;
+      var d2 = s2.last_edit;
+      if(+d1 < +d1){
+        return 1
+      } else if(+d1 === +d2){
+        return 0;
+      } else {
+        return -1;
+      }
+
+    });
   }
+
 
   $scope.$watch('screenings', reset, true);
 
@@ -26,7 +38,7 @@ angular.module('roomscreening.controllers.goals', [])
   $scope.$on('screeningDetailReady', function(){
     if($stateParams.id != null){
       $scope.select($stateParams.id);
-    } else if($scope.screeningsArray.length) {
+    } else if($scope.screeningsArray != null && $scope.screeningsArray.length) {
       $scope.select($scope.screeningsArray[0].id);
     }
   });
@@ -68,6 +80,9 @@ angular.module('roomscreening.controllers.goals', [])
   });
 
   $scope.numberOfIssues = function(screening, room){
+    if(screening.issues == null){
+      return 0;
+    }
     return screening.issues.filter(function(issue){
       return issue.room_id == room.room_id;
     }).length;
@@ -115,6 +130,7 @@ angular.module('roomscreening.controllers.goals', [])
       var id = $stateParams.id;
     } else {
       $scope.screening.rooms = [];
+      $scope.screening.complete = false;
       var id = LocalScreeningService.add($scope.screening);
     }
     $ionicHistory.nextViewOptions({
