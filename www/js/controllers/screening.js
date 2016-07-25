@@ -66,6 +66,13 @@ angular.module('roomscreening.controllers.goals', [])
   $scope.$on('screeningSelected', function(event, screening){
     $scope.screening = screening;
   });
+
+  $scope.numberOfIssues = function(screening, room){
+    return screening.issues.filter(function(issue){
+      return issue.room_id == room.room_id;
+    }).length;
+  };
+
   $rootScope.$broadcast('screeningDetailReady');
   $scope.complete = function(screening){
     if($scope.screening.rooms && $scope.screening.rooms.length){

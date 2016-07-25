@@ -4,7 +4,7 @@
   </ion-header-bar>
   <ion-content>
     <ion-list show-delete="showDelete">
-      <ion-item class="icon-item-left item-balanced" href="#/screenings/edit" nav-direction="forward">
+      <ion-item class="item-icon-left item-balanced" href="#/screenings/edit" nav-direction="forward">
         <i class="icon ion-plus-circled"></i>
         Doel Toevoegen
       </ion-item>
@@ -15,7 +15,7 @@
       ng-click="select(screening.id)"
       on-swipe-right="swipeRight()"
       on-swipe-left="swipeLeft()">
-        <ion-delete-button class="ion-minus-circled" ng-click="remove(screening.id)"></ion-delete-button>
+        <ion-delete-button class="ion-trash-a" ng-click="remove(screening.id)"></ion-delete-button>
         <i class="icon ion-checkmark" ng-if="screening.complete"></i>
         {{screening.client.initials}}
         <span class="item-note">

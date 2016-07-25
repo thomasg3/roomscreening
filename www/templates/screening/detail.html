@@ -28,13 +28,13 @@
       <!-- List of rooms -->
       <ion-list class="list card">
         <ion-item collection-repeat="room in screening.rooms">
-          {{room.name}}
+          {{room.room}}
           <span class="item-note">
-            {{room.issues}}
-            <span ng-if="room.issues == 1">
+            {{numberOfIssues(screening, room)}}
+            <span ng-if="numberOfIssues(screening, room) == 1">
               hindernis
             </span>
-            <span ng-if="room.issues != 1">
+            <span ng-if="numberOfIssues(screening, room) != 1">
               hindernissen
             </span>
           </span>
@@ -44,14 +44,14 @@
       <!-- Action buttons -->
       <div ng-if="!screening.complete && screening.rooms">
         <div ng-if="screening.rooms && !screening.rooms.length">
-          <button class=" button button-full button-large button-balanced icon-center ion-play">
+          <a class=" button button-full button-large button-balanced icon-center ion-play" href="#/survey/survey/{{screening.id}}" nav-direction="forward">
              Screening Starten
-          </button>
+          </a>
         </div>
         <div ng-if="screening.rooms && screening.rooms.length">
-          <button class=" button button-full button-large icon-center ion-play">
+          <a class=" button button-full button-large icon-center ion-play" href="#/survey/survey/{{screening.id}}" nav-direction="forward">
              Screening Hervatten
-          </button>
+          </a>
           <button class="button button-full button-large icon-center ion-checkmark" ng-click="complete(screening)">
             Screening Afwerken
           </button>

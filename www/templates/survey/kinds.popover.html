@@ -1,0 +1,14 @@
+<ion-popover-view style="height: {{(60*kinds.length)+'px'}}">
+  <ion-header-bar>
+    <h1 class="title">Soort</h1>
+  </ion-header-bar>
+  <ion-content>
+    <ion-item
+      ng-repeat="kind in kinds"
+      ng-click="toggleKind(kind.sort_issue)"
+      ng-class="{'item-stable': !hasKind(kind.sort_issue), 'item-positive': hasKind(kind.sort_issue)}">
+      <b>{{kind.sort_issue}}</b>:
+      {{kind.description}}
+    </ion-item>
+  </ion-content>
+</ion-popover-view>
