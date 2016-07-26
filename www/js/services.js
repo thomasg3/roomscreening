@@ -300,6 +300,8 @@ angular.module('roomscreening.services', [])
           executionQueue.forEach(function(f){
             f();
           });
+        } else {
+          $rootScope.$broadcast("SyncFail");
         }
       },
       lastSyncDate : function(){

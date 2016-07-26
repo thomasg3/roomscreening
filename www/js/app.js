@@ -38,9 +38,11 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
     });
 
     var timer = function(){
+      var minutes  = 10;
+      $log.debug("Timer: set for "+minutes+" minutes.")
       $timeout(function(){
         SyncService.sync();
-      }, 10*60*1000, false);
+      }, minutes*60*1000, false);
     }
 
 
@@ -52,6 +54,10 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
 
     $rootScope.$on('SyncComplete', function(){
       $ionicLoading.hide();
+      timer();
+    });
+
+    $rootScope.$on('SyncFail', function(){
       timer();
     })
 
