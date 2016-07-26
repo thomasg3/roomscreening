@@ -265,6 +265,7 @@ angular.module('roomscreening.services', [])
         this.count++;
         if(this.count==executionQueue.length){
           $localStorage.last_sync = new Date();
+          this.count = 0;
           $log.debug("Sync::Complete");
           $rootScope.$broadcast('SyncComplete');
         }
@@ -299,7 +300,6 @@ angular.module('roomscreening.services', [])
         return $localStorage.last_sync;
       }
       //update after some time too...
-      //CHAINING...
     };
   })
 

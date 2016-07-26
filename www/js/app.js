@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreening.controllers', 'roomscreening.services', 'roomscreening.filters', 'roomscreening.directives'])
-.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log, $cordovaNetwork, SyncService) {
+.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log, $cordovaNetwork, SyncService, $ionicLoading, $timeout) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -37,6 +37,25 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
       }
     });
 
+    var checkPerMinute = 10;
+    var timer = function(){
+      $timeout(function(){
+        SyncService.sync();
+      }, checkPerMinute*60*1000, false);
+    }
+
+
+    $rootScope.$on('SyncStart', function(){
+      $ionicLoading.show({
+        template: "<ion-spinner></ion-spinner> Sychroniseren..."
+      });
+    });
+
+    $rootScope.$on('SyncComplete', function(){
+      $ionicLoading.hide();
+      timer();
+    })
+
     if(!ionic.Platform.isWebView()){
       SyncService.sync();
     }
@@ -53,6 +72,8 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
     $rootScope.$on('$cordovaNetwork:online', function(){
       SyncService.sync();
     });
+
+
 
   });
 })
