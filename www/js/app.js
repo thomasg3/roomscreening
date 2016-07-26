@@ -37,11 +37,10 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
       }
     });
 
-    var checkPerMinute = 10;
     var timer = function(){
       $timeout(function(){
         SyncService.sync();
-      }, checkPerMinute*60*1000, false);
+      }, 10*60*1000, false);
     }
 
 
@@ -58,9 +57,7 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
 
     if(!ionic.Platform.isWebView()){
       SyncService.sync();
-    }
-
-    if($cordovaNetwork.isOnline()){
+    } else if($cordovaNetwork.isOnline()){
       SyncService.sync();
     }
 

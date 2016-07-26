@@ -263,9 +263,8 @@ angular.module('roomscreening.services', [])
       count: 0,
       increment: function(){
         this.count++;
-        if(this.count==executionQueue.length){
+        if(this.count != 0 && this.count%executionQueue.length == 0){
           $localStorage.last_sync = new Date();
-          this.count = 0;
           $log.debug("Sync::Complete");
           $rootScope.$broadcast('SyncComplete');
         }
@@ -275,19 +274,26 @@ angular.module('roomscreening.services', [])
 
     return {
       sync: function(){
-        if((!ionic.Platform.isWebView() || $cordovaNetwork.getNetwork() == "wifi") && $localStorage.loggedIn){
+        //check freshness
+        var lastSync = (new Date($localStorage.last_sync)).getTime();
+        var now = (new Date()).getTime();
+        var difference = Math.abs(now - lastSync);
+        var differenceMinutes = Math.ceil(difference / (60 * 1000));
+        if(differenceMinutes > 5 && (!ionic.Platform.isWebView() || $cordovaNetwork.getNetwork() == "wifi") && $localStorage.loggedIn){
           $log.debug("Sync::Start");
           $rootScope.$broadcast('SyncStart');
 
           (['Sync.completeScreenings.success','Sync.structure.success', 'Sync.clients.success', 'Sync.kinds.success']).forEach(function(e){
-            $rootScope.$on(e,function(){
+            var listener = $rootScope.$on(e,function(){
               counter.increment();
+              listener();
             });
           });
 
           (['Sync.completeScreenings.error','Sync.structure.error', 'Sync.clients.error', 'Sync.kinds.error']).forEach(function(e){
-            $rootScope.$on(e, function(){
+            var listener = $rootScope.$on(e, function(){
               counter.increment();
+              listener();
             });
           });
 
@@ -299,7 +305,7 @@ angular.module('roomscreening.services', [])
       lastSyncDate : function(){
         return $localStorage.last_sync;
       }
-      //update after some time too...
+
     };
   })
 
