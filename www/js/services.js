@@ -30,6 +30,13 @@ angular.module('roomscreening.services', [])
 
     }
   })
+  .factory('DictToArray', function(){
+    return {
+      convert: function(dictionary){
+        return Object.keys(dictionary).map(function(id){return dictionary[id];});
+      }
+    }
+  })
   .factory('LocalScreeningService', function($localStorage) {
     var guid = function() {
       var S4 = function() {
@@ -58,7 +65,7 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('AccountService', function($localStorage, baseURL, $http, $log) {
+  .factory('AccountService', function($localStorage, baseURL, $http, $log, $rootScope) {
     return {
       //success = successful login, failure = failed to login, error = some kind of error occured
       login: function(email, password, success, failure ,error) {
@@ -74,6 +81,7 @@ angular.module('roomscreening.services', [])
               user.email = email;
               $localStorage.currentUser = user;
               $localStorage.loggedIn = true;
+              $rootScope.$broadcast('LogIn');
               success();
             } else {
               $log.warn("Login", angular.toJson(response));
@@ -88,24 +96,29 @@ angular.module('roomscreening.services', [])
       logout: function() {
          $localStorage.currentUser = {};
          $localStorage.loggedIn = false;
+         $rootScope.$broadcast('LogOut');
+
       }
     }
   })
-  .factory('ClientService', function($localStorage, baseURL, $http){
+  .factory('ClientService', function($localStorage, baseURL, $http, DictToArray){
     return {
       getAll: function(success, failure){
+        return DictToArray.convert($localStorage.clients);
+      },
+      get: function(id){
+          return $localStorage.clients[id];
+      },
+      sync: function(success, failure){
         $http.get(baseURL+'clients').then(function(response){
           $localStorage.clients = {};
           response.data.items.forEach(function(client){
             $localStorage.clients[client.id] = client;
           });
-          success(response.data.items);
+          success();
         }, function(response) {
-          failure(response)
-        })
-      },
-      get: function(id){
-          return $localStorage.clients[id];
+          failure();
+        });
       }
     }
   })
@@ -155,6 +168,44 @@ angular.module('roomscreening.services', [])
         return dictionary[roomName] || "ion-home";
       }
     }
+  })
+  .factory('SyncService', function($rootScope, $cordovaNetwork, $log, $localStorage ,LocalScreeningService, ClientService, StructureService, KindOfIssueService, DictToArray){
+
+
+    var syncCompleteScreenings = function(){
+      var completeScreenings = DictToArray.convert(LocalScreeningService.getAll()).filter(function(screening){
+        return screening.complete;
+      });
+    };
+
+    var syncStructure = function(){
+
+    };
+
+    var syncClients = function(){
+      ClientService.sync(function(){
+          //success
+      }, function(){
+          //failure
+      });
+    }
+
+    var syncKinds = function(){
+
+    }
+
+    return {
+      sync: function(){
+        if((!ionic.Platform.isWebView() || $cordovaNetwork.getNetwork() == "wifi") && $localStorage.loggedIn){
+          $rootScope.$broadcast('SyncStart');
+          syncCompleteScreenings();
+          syncStructure();
+          syncClients();
+          syncKinds();
+          $rootScope.$broadcast('SyncComplete');
+        }
+      }
+    };
   })
 
 ;

@@ -106,14 +106,7 @@ angular.module('roomscreening.controllers.goals', [])
 })
 
 .controller('ScreeningEditController', function($scope, LocalScreeningService, $state, $stateParams,$ionicHistory, ClientService, $ionicLoading){
-  $ionicLoading.show();
-  ClientService.getAll(function(clients){
-    $scope.clients = clients;
-    $ionicLoading.hide();
-  }, function(error){
-    $scope.clients = [];
-    $ionicLoading.hide();
-  })
+  $scope.clients = ClientService.getAll();
 
   if($stateParams.id != null){
     $scope.screening = angular.copy(LocalScreeningService.get($stateParams.id));

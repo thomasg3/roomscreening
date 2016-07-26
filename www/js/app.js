@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreening.controllers', 'roomscreening.services', 'roomscreening.filters', 'roomscreening.directives'])
-.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log) {
+.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log, $cordovaNetwork, SyncService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -26,6 +26,8 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
       clients: {}
     });
 
+
+
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
       if(toState.name != 'login' && !$localStorage.loggedIn){
         event.preventDefault();
@@ -33,16 +35,30 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
       }
     });
 
-    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-      $log.warn("Network",networkState);
+    $rootScope.$on('SyncStart', function(){
+      $log.warn("SyncStart");
     })
 
-    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-      $log.warn("Network",networkState);
+    $rootScope.$on('SyncComplete', function(){
+      $log.warn('SyncComplete');
     })
 
-    $log.warn("Starting...");
+    if(!ionic.Platform.isWebView()){
+      SyncService.sync();
+    }
 
+    if($cordovaNetwork.isOnline()){
+      SyncService.sync();
+    }
+
+
+    $rootScope.$on('LogIn', function(){
+      SyncService.sync();
+    });
+
+    $rootScope.$on('$cordovaNetwork:online', function(){
+      SyncService.sync();
+    });
 
   });
 })
