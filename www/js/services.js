@@ -202,9 +202,12 @@ angular.module('roomscreening.services', [])
           syncStructure();
           syncClients();
           syncKinds();
+          $localStorage.last_sync = new Date();
           $rootScope.$broadcast('SyncComplete');
         }
       }
+      //keep track of last update
+      //update after some time too....
     };
   })
 
