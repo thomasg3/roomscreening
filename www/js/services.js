@@ -151,6 +151,17 @@ angular.module('roomscreening.services', [])
         }, function(response){
           error();
         });
+      },
+      convert: function(kindArray){
+        var kinds = this.get();
+        return kindArray.map(function(kind){
+          for(var i=0; i<kinds.length; i++){
+            if(kinds[i].sort_issue == kind){
+              return i+1;
+            }
+          }
+          return -1;
+        }).join();
       }
     }
   })
@@ -177,21 +188,48 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('SyncService', function($rootScope, $cordovaNetwork, $log, $localStorage ,LocalScreeningService, ClientService, StructureService, KindOfIssueService, DictToArray){
-
-
+  .factory('SyncService', function(baseURL, $rootScope, $cordovaNetwork, $log, $localStorage ,LocalScreeningService, ClientService, StructureService, KindOfIssueService, DictToArray, $http){
     var syncCompleteScreenings = function(){
+      $log.debug("Sync::CompleteScreenings");
       var completeScreenings = DictToArray.convert(LocalScreeningService.getAll()).filter(function(screening){
         return screening.complete;
       });
+      data = completeScreenings.map(function(screening){
+        return {
+          client_id: screening.client.id,
+          registration_date: screening.last_edit,
+          question: screening.goal,
+          issues: screening.issues.map(function(issue){
+            return {
+                room_id: issue.room_id,
+                category_id: issue.category_id,
+                item_id: issue.item_id,
+                sub_item_id: issue.sub_item_id,
+                description: issue.description,
+                not_applicable: (issue.not_applicable)?'Y':'N',
+                issue_client: (issue.issue_client)?'Y':'N',
+                issue_care_giver: (issue.issue_care_giver)?'Y':'N',
+                sort_issue_ids: KindOfIssueService.convert(issue.sort_issues)
+            }
+          })
+        };
+      });
+      $log.debug("Sync::completeScreenings::onHold");
+      $rootScope.$emit("Sync.completeScreenings.success");
+
+      //send
+      //adjust storage to success/error
+      //feedback
     };
 
     var syncStructure = function(){
       $log.debug("Sync::Structure");
       StructureService.sync(function(){
         $log.debug("Sync::Structure::Success");
+        $rootScope.$emit("Sync.structure.success");
       }, function(){
         $log.error("Sync::Structure::Error");
+        $rootScope.$emit("Sync.structure.error");
       });
     };
 
@@ -199,8 +237,10 @@ angular.module('roomscreening.services', [])
       $log.debug("Sync::Clients");
       ClientService.sync(function(){
           $log.debug("Sync::Clients::Success");
+          $rootScope.$emit("Sync.clients.success");
       }, function(){
           $log.error("Sync::Clients::Error");
+          $rootScope.$emit("Sync.clients.error");
       });
     }
 
@@ -208,26 +248,57 @@ angular.module('roomscreening.services', [])
       $log.debug("Sync::Kinds");
       KindOfIssueService.sync(function(){
         $log.debug("Sync::Kinds::Success");
+        $rootScope.$emit("Sync.kinds.success");
       }, function(){
         $log.error("Sync::Kinds::Error");
+        $rootScope.$emit("Sync.kinds.error");
       });
     }
+
+    var executionQueue = [syncCompleteScreenings, syncStructure, syncClients, syncKinds];
+
+
+
+    var counter = {
+      count: 0,
+      increment: function(){
+        this.count++;
+        if(this.count==executionQueue.length){
+          $localStorage.last_sync = new Date();
+          $log.debug("Sync::Complete");
+          $rootScope.$broadcast('SyncComplete');
+        }
+      }
+    }
+
 
     return {
       sync: function(){
         if((!ionic.Platform.isWebView() || $cordovaNetwork.getNetwork() == "wifi") && $localStorage.loggedIn){
           $log.debug("Sync::Start");
           $rootScope.$broadcast('SyncStart');
-          syncCompleteScreenings();
-          syncStructure();
-          syncClients();
-          syncKinds();
-          $localStorage.last_sync = new Date();
-          $log.debug("Sync::Complete");
-          $rootScope.$broadcast('SyncComplete');
+
+          (['Sync.completeScreenings.success','Sync.structure.success', 'Sync.clients.success', 'Sync.kinds.success']).forEach(function(e){
+            $rootScope.$on(e,function(){
+              counter.increment();
+            });
+          });
+
+          (['Sync.completeScreenings.error','Sync.structure.error', 'Sync.clients.error', 'Sync.kinds.error']).forEach(function(e){
+            $rootScope.$on(e, function(){
+              counter.increment();
+            });
+          });
+
+          executionQueue.forEach(function(f){
+            f();
+          });
         }
+      },
+      lastSyncDate : function(){
+        return $localStorage.last_sync;
       }
-      //update after some time too....
+      //update after some time too...
       //CHAINING...
     };
   })
