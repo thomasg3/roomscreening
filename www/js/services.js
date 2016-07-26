@@ -122,27 +122,35 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('StructureService', function(baseURL, $http){
+  .factory('StructureService', function(baseURL, $http, $localStorage){
     return {
-      get: function(success, error){
+      get: function(){
+        return $localStorage.structure;
+      },
+      sync: function(success, error){
         $http.get(baseURL+'structure').then(function(response){
           var structure = response.data.items[0];
           structure.lastUpdated = new Date();
-          success(structure);
+          $localStorage.structure = structure;
+          success();
         }, function(response){
-            error(response);
+            error();
         })
       }
     };
   })
-  .factory('KindOfIssueService', function(baseURL, $http){
+  .factory('KindOfIssueService', function(baseURL, $http, $localStorage){
     return {
-      get: function(success, error){
+      get: function(){
+        return $localStorage.kinds;
+      },
+      sync: function(success, error){
         $http.get(baseURL+'sort_issues').then(function(response){
-          success(response.data.items);
+          $localStorage.kinds = response.data.items;
+          success();
         }, function(response){
-          error(response);
-        })
+          error();
+        });
       }
     }
   })
@@ -179,35 +187,48 @@ angular.module('roomscreening.services', [])
     };
 
     var syncStructure = function(){
-
+      $log.debug("Sync::Structure");
+      StructureService.sync(function(){
+        $log.debug("Sync::Structure::Success");
+      }, function(){
+        $log.error("Sync::Structure::Error");
+      });
     };
 
     var syncClients = function(){
+      $log.debug("Sync::Clients");
       ClientService.sync(function(){
-          //success
+          $log.debug("Sync::Clients::Success");
       }, function(){
-          //failure
+          $log.error("Sync::Clients::Error");
       });
     }
 
     var syncKinds = function(){
-
+      $log.debug("Sync::Kinds");
+      KindOfIssueService.sync(function(){
+        $log.debug("Sync::Kinds::Success");
+      }, function(){
+        $log.error("Sync::Kinds::Error");
+      });
     }
 
     return {
       sync: function(){
         if((!ionic.Platform.isWebView() || $cordovaNetwork.getNetwork() == "wifi") && $localStorage.loggedIn){
+          $log.debug("Sync::Start");
           $rootScope.$broadcast('SyncStart');
           syncCompleteScreenings();
           syncStructure();
           syncClients();
           syncKinds();
           $localStorage.last_sync = new Date();
+          $log.debug("Sync::Complete");
           $rootScope.$broadcast('SyncComplete');
         }
       }
-      //keep track of last update
       //update after some time too....
+      //CHAINING...
     };
   })
 

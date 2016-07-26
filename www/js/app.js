@@ -23,7 +23,9 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
       currentUser: {},
       loggedIn: false,
       screenings: {},
-      clients: {}
+      clients: {},
+      kinds: [],
+      structure: {},
     });
 
 
@@ -34,14 +36,6 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
         $state.go('login');
       }
     });
-
-    $rootScope.$on('SyncStart', function(){
-      $log.warn("SyncStart");
-    })
-
-    $rootScope.$on('SyncComplete', function(){
-      $log.warn('SyncComplete');
-    })
 
     if(!ionic.Platform.isWebView()){
       SyncService.sync();

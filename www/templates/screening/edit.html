@@ -30,8 +30,6 @@
           <ion-radio ng-repeat="client in clients | filter:filter | orderBy:'initials'" ng-model="screening.client" ng-value="client" required>{{client.initials}}</ion-radio>
         </ion-list>
 
-
-
         <button class="button button-full button-positive" type="submit" ng-disabled="editScreeningForm.$invalid">Opslaan</button>
       </div>
     </form>

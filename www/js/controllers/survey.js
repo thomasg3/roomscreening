@@ -1,19 +1,6 @@
 angular.module('roomscreening.controllers.survey', [])
-  .controller('TestCtrl', function($scope, StructureService, $log){
-    StructureService.get(function(structure){
-      $scope.structure = structure;
-    }, function(error){
-      $log.error(error);
-    })
-  })
-
-
   .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup){
-    StructureService.get(function(structure){
-      $scope.structure = structure;
-    }, function(error){
-      $log.error(error);
-    });
+    $scope.structure = StructureService.get();
     $scope.screening = LocalScreeningService.get($stateParams.screeningId);
     if($scope.screening.issues == null){
       $scope.screening.issues = [];
@@ -21,11 +8,7 @@ angular.module('roomscreening.controllers.survey', [])
     $scope.$on('roomIndexSelected', function(event, index){
       $scope.room = $scope.screening.rooms[index];
     });
-    KindOfIssueService.get(function(kinds){
-      $scope.kinds = kinds;
-    }, function(error){
-      $log.error(error);
-    })
+    $scope.kinds = KindOfIssueService.get();
 
     var isIssue = function(issue, roomId, categoryId, itemId, subItemId){
       return issue.room_id == roomId
@@ -131,12 +114,9 @@ angular.module('roomscreening.controllers.survey', [])
 
   .controller('SurveyOverviewCtrl', function($scope, $stateParams, LocalScreeningService, $ionicModal,StructureService, RoomToIconService, $rootScope, $ionicPopup){
     var selectedIndex;
-    StructureService.get(function(structure){
-      $scope.structure = structure;
-    }, function(error){
-      $log.error(error);
-    });
+    $scope.structure = StructureService.get();
     $scope.screening = LocalScreeningService.get($stateParams.screeningId);
+
     $ionicModal.fromTemplateUrl('templates/survey/addRoom.modal.html', {
       scope: $scope
     }).then(function(modal){
