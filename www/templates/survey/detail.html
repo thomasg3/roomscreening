@@ -45,5 +45,22 @@
         </ion-list>
       </div>
     </ion-list>
+    <div ng-if="!room">
+      <ion-content>
+        <div class="row row-center">
+          <div class="col col-center text-center">
+            <h1><i class="ion-leaf"></i></h1>
+            <h1 class="dark">Geen Ruimte Geselecteerd</h1>
+            <p>Selecteer een Ruimte uit de lijst om details te bekijken.</p>
+          </div>
+        </div>
+      </ion-content>
+      <style>
+        .row, .scroll {
+          height: 100%
+        }
+      </style>
+    </div>
   </ion-content>
+
 </ion-view>

@@ -6,7 +6,7 @@ angular.module('roomscreening.controllers.survey', [])
       $scope.screening.issues = [];
     }
     $scope.$on('roomIndexSelected', function(event, index){
-      $scope.room = $scope.screening.rooms[index];
+        $scope.room = $scope.screening.rooms[index];
     });
     $scope.kinds = KindOfIssueService.get();
 
@@ -156,7 +156,7 @@ angular.module('roomscreening.controllers.survey', [])
       }).then(function(confirmed){
         if(confirmed){
           $scope.screening.rooms.splice(index, 1);
-          if($scope.selectedIndex == index){
+          if(selectedIndex == index){
             $scope.select();
           }
         }
