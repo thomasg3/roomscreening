@@ -1,5 +1,18 @@
-angular.module('roomscreening.controllers.account', [])
-  .controller('LoginCtrl', function($scope, $log, AccountService, $state, $ionicHistory, $localStorage) {
+angular.module('roomscreening.controllers.account', ['ngCordova'])
+  .controller('LoginCtrl', function($scope, $log, AccountService, $state, $ionicHistory, $localStorage, $cordovaNetwork, $ionicPlatform) {
+    $scope.connected = true;
+    $ionicPlatform.ready(function(){
+      $scope.connected = !ionic.Platform.isWebView() || $cordovaNetwork.isOnline();
+
+      $scope.$on('$cordovaNetwork:online', function(){
+        $scope.connected = true;
+      })
+
+      $scope.$on('$cordovaNetwork:offline', function(){
+        $scope.connected = false;
+      })
+
+    });
     $scope.loading = true;
     $ionicHistory.clearCache();
     $ionicHistory.clearHistory();

@@ -21,9 +21,14 @@
                 <label class="item item-input">
                   <input type="password" placeholder="Wachtwoord" ng-model="loginData.password" required>
                 </label>
-                  <button class="button button-large button-block button-positive" ng-class="{'button-clear': loginForm.$invalid}" type="submit" ng-disabled="loginForm.$invalid">Login</button>
+                  <button class="button button-large button-block button-positive" ng-class="{'button-clear': loginForm.$invalid}" type="submit" ng-disabled="loginForm.$invalid || !connected">Login</button>
               </ion-list>
             </form>
+            <div class="errorMessage" ng-if="!connected">
+              <p>
+                U bent niet verbonden met het internet en kan niet inloggen.
+              </p>
+            </div>
           </div>
           <div ng-if="loading">
             <ion-spinner></ion-spinner>

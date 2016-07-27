@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreening.controllers', 'roomscreening.services', 'roomscreening.filters', 'roomscreening.directives'])
-.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log, $cordovaNetwork, SyncService, $ionicLoading, $timeout) {
+.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log, $cordovaNetwork, SyncService, $ionicLoading, $timeout, freshnessThreshold) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -26,20 +26,28 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
       clients: {},
       kinds: [],
       structure: {},
+      last_sync: new Date(0)
     });
 
 
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+      $ionicLoading.show();
       if(toState.name != 'login' && !$localStorage.loggedIn){
         event.preventDefault();
         $state.go('login');
       }
     });
 
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+      $timeout(function(){
+        $ionicLoading.hide();
+      }, 1000);
+    })
+
     var timer = function(){
-      var minutes  = 1;
-      $log.debug("Timer: set for "+minutes+" minutes.")
+      var minutes  = freshnessThreshold;
+      $log.debug((new Date())+":: Timer: set for "+minutes+" minutes.")
       $timeout(function(){
         SyncService.sync();
       }, minutes*60*1000, false);
@@ -75,9 +83,6 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
     $rootScope.$on('$cordovaNetwork:online', function(){
       SyncService.sync();
     });
-
-
-
   });
 })
 

@@ -1,6 +1,7 @@
 angular.module('roomscreening.services', [])
   .constant('appAuthenticationToken', '1234DFSFSG5T6G678ISFDFEE2ZVBGJIK')
   .constant('baseURL', 'https://pxl.apexhealth.eu/ords/hopp/rs/api/')
+  .constant('freshnessThreshold', 10 /*minutes*/)
   .factory('httpAuthenticationInterceptor', function(appAuthenticationToken){
     return {
       request: function(config){
@@ -188,34 +189,52 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('SyncService', function(baseURL, $rootScope, $cordovaNetwork, $log, $localStorage ,LocalScreeningService, ClientService, StructureService, KindOfIssueService, DictToArray, $http){
+  .factory('SyncService', function(baseURL, $rootScope, $cordovaNetwork, $log, $localStorage ,LocalScreeningService, ClientService, StructureService, KindOfIssueService, DictToArray, $http, freshnessThreshold){
     var syncCompleteScreenings = function(){
       $log.debug("Sync::CompleteScreenings");
       var completeScreenings = DictToArray.convert(LocalScreeningService.getAll()).filter(function(screening){
         return screening.complete;
       });
-      data = completeScreenings.map(function(screening){
-        return {
-          client_id: screening.client.id,
-          registration_date: screening.last_edit,
-          question: screening.goal,
-          issues: screening.issues.map(function(issue){
-            return {
-                room_id: issue.room_id,
-                category_id: issue.category_id,
-                item_id: issue.item_id,
-                sub_item_id: issue.sub_item_id,
-                description: issue.description,
-                not_applicable: (issue.not_applicable)?'Y':'N',
-                issue_client: (issue.issue_client)?'Y':'N',
-                issue_care_giver: (issue.issue_care_giver)?'Y':'N',
-                sort_issue_ids: KindOfIssueService.convert(issue.sort_issues)
-            }
-          })
-        };
-      });
-      $log.debug("Sync::completeScreenings::onHold");
-      $rootScope.$emit("Sync.completeScreenings.success");
+      if(completeScreenings.length){
+        data = completeScreenings.map(function(screening){
+          return {
+            client_id: screening.client.id,
+            registration_date: screening.last_edit,
+            question: screening.goal,
+            issues: screening.issues.map(function(issue){
+              return {
+                  room_id: issue.room_id,
+                  category_id: issue.category_id,
+                  item_id: issue.item_id,
+                  sub_item_id: issue.sub_item_id,
+                  description: issue.description,
+                  not_applicable: (issue.not_applicable)?'Y':'N',
+                  issue_client: (issue.issue_client)?'Y':'N',
+                  issue_care_giver: (issue.issue_care_giver)?'Y':'N',
+                  sort_issue_ids: KindOfIssueService.convert(issue.sort_issues)
+              }
+            }),
+            pictures: []
+          };
+        });
+        data = {items: data};
+        $log.debug("Sync::CompleteScreenings::Initilized");
+        $http.post(baseURL+'dossier', data, {headers: {client_id: -1}}).then(function(){
+          completeScreenings.forEach(function(s){
+            LocalScreeningService.remove(s.id);
+          });
+          $log.debug("Sync::CompleteScreenings::Success");
+          $rootScope.$emit("Sync.completeScreenings.success");
+        }, function(){
+          $log.debug("Sync::CompleteScreenings::Error");
+          $rootScope.$emit("Sync.completeScreenings.error");
+        })
+      } else {
+        $log.debug("Sync::CompleteScreenings::Success");
+        $rootScope.$emit("Sync.completeScreenings.success");
+      }
+
+
 
       //send
       //adjust storage to success/error
@@ -274,12 +293,11 @@ angular.module('roomscreening.services', [])
 
     return {
       sync: function(){
-        //check freshness
         var lastSync = (new Date($localStorage.last_sync)).getTime();
         var now = (new Date()).getTime();
         var difference = Math.abs(now - lastSync);
         var differenceMinutes = Math.ceil(difference / (60 * 1000));
-        if(differenceMinutes > 5 && (!ionic.Platform.isWebView() || $cordovaNetwork.getNetwork() == "wifi") && $localStorage.loggedIn){
+        if(differenceMinutes > freshnessThreshold && (!ionic.Platform.isWebView() || $cordovaNetwork.isOnline()) && $localStorage.loggedIn){
           $log.debug("Sync::Start");
           $rootScope.$broadcast('SyncStart');
 
