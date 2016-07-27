@@ -1,5 +1,5 @@
 angular.module('roomscreening.controllers.survey', [])
-  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup){
+  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup, $ionicTabsDelegate){
     $scope.structure = StructureService.get();
     $scope.screening = LocalScreeningService.get($stateParams.screeningId);
     if($scope.screening.issues == null){
@@ -7,6 +7,7 @@ angular.module('roomscreening.controllers.survey', [])
     }
     $scope.$on('roomIndexSelected', function(event, index){
         $scope.room = $scope.screening.rooms[index];
+        $ionicTabsDelegate.select(0);
     });
     $scope.kinds = KindOfIssueService.get();
 
@@ -58,6 +59,22 @@ angular.module('roomscreening.controllers.survey', [])
       } else {
         $scope.addIssue(roomId, categoryId, itemId, subItemId);
       }
+    }
+
+    $scope.showSurvey = function(){
+      $scope.tabIndex = 0;
+    }
+
+    $scope.showPhotos = function(){
+      $scope.tabIndex = 1;
+    }
+
+    $scope.surveyTab = function(){
+      return $scope.tabIndex == 0;
+    }
+
+    $scope.photoTab = function(){
+      return $scope.tabIndex == 1;
     }
 
     $rootScope.$broadcast('surveyDetailReady');

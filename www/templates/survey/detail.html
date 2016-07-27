@@ -1,7 +1,11 @@
 <ion-view>
   <ion-nav-title>{{room.room}}</ion-nav-title>
+  <ion-tabs class="tabs-icon-top tabs-color-positive" ng-if="room">
+    <ion-tab title="Screening" icon="ion-eye" on-select="showSurvey()"></ion-tab>
+    <ion-tab title="Foto's" icon="ion-images" on-select="showPhotos()"></ion-tab>
+  </ion-tabs>
   <ion-content>
-    <ion-list>
+    <ion-list ng-if="surveyTab()">
       <!-- CATEGORY -->
       <div ng-repeat="category in structure.categories | categoriesFilter:room.room_id | orderBy:order_nr">
         <ion-item class="item-button-left item-stable" ng-model="categoryShow[category.category_id]">
@@ -45,6 +49,17 @@
         </ion-list>
       </div>
     </ion-list>
+    <div ng-if="photoTab()">
+      <button class="button button-large button-full button-positive icon ion-camera"></button>
+      <ion-list>
+        <ion-item class="item-thumbnail-left">
+          <img src="img/ionic.png" />
+          <h2>Title</h2>
+          <p> Today </p>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div ng-if="room" style="height:400px;width:100px"></div>
     <div ng-if="!room">
       <ion-content>
         <div class="row row-center">
@@ -62,5 +77,4 @@
       </style>
     </div>
   </ion-content>
-
 </ion-view>
