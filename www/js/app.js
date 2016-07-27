@@ -38,7 +38,7 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
     });
 
     var timer = function(){
-      var minutes  = 10;
+      var minutes  = 1;
       $log.debug("Timer: set for "+minutes+" minutes.")
       $timeout(function(){
         SyncService.sync();
