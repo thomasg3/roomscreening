@@ -17,7 +17,7 @@
       on-swipe-left="swipeLeft()">
         <ion-delete-button class="ion-trash-a" ng-click="remove(screening.id)"></ion-delete-button>
         <i class="icon ion-checkmark" ng-if="screening.complete"></i>
-        {{screening.client.initials}}
+        {{screening.client.first_name}} {{screening.client.last_name}}
         <span class="item-note">
           {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
         </span>
@@ -32,7 +32,8 @@
       on-swipe-left="swipeLeft()">
         <ion-delete-button class="ion-trash-a" ng-click="remove(screening.id)"></ion-delete-button>
         <i class="icon ion-checkmark" ng-if="screening.complete"></i>
-        {{screening.client.initials}}
+        {{screening.client.first_name}}
+        {{screening.client.last_name}}
         <span class="item-note">
           {{screening.last_edit | date: "HH:mm dd/MM/yyyy"}}
         </span>

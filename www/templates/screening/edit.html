@@ -27,7 +27,7 @@
           </label>
         </div>
         <ion-list class="list-inset">
-          <ion-radio ng-repeat="client in clients | filter:filter | orderBy:'initials'" ng-model="screening.client" ng-value="client" required>{{client.initials}}</ion-radio>
+          <ion-radio ng-repeat="client in clients | filter:filter | orderBy:'initials'" ng-model="screening.client" ng-value="client" required>{{client.initials}} - {{client.first_name}} {{client.last_name}}</ion-radio>
         </ion-list>
 
         <button class="button button-full button-positive" type="submit" ng-disabled="editScreeningForm.$invalid">Opslaan</button>
