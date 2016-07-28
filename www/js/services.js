@@ -38,6 +38,16 @@ angular.module('roomscreening.services', [])
       }
     }
   })
+  .factory('GUID', function(){
+    return {
+      generate: function(){
+        var S4 = function() {
+          return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-4" + S4().substr(0, 3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+      }
+    }
+  })
   .factory('LocalScreeningService', function($localStorage) {
     var guid = function() {
       var S4 = function() {
@@ -214,7 +224,7 @@ angular.module('roomscreening.services', [])
                   sort_issue_ids: KindOfIssueService.convert(issue.sort_issues)
               }
             }),
-            pictures: []
+            pictures: screening.photos
           };
         });
         data = {items: data};

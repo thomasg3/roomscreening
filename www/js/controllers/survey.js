@@ -1,5 +1,63 @@
 angular.module('roomscreening.controllers.survey', [])
-  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup, $ionicTabsDelegate, $cordovaCamera, $ionicPlatform){
+  .controller('SurveyOverviewCtrl', function($scope, $stateParams, LocalScreeningService, $ionicModal,StructureService, RoomToIconService, $rootScope, $ionicPopup){
+    var selectedIndex;
+    $scope.structure = StructureService.get();
+    $scope.screening = LocalScreeningService.get($stateParams.screeningId);
+
+    $ionicModal.fromTemplateUrl('templates/survey/addRoom.modal.html', {
+      scope: $scope
+    }).then(function(modal){
+      $scope.addRoomModal = modal;
+    })
+
+    $scope.convert = function(room){
+      return RoomToIconService.convert(room.room);
+    }
+
+    $scope.showAddRoom = function(){$scope.addRoomModal.show();};
+    $scope.hideAddRoom = function(){$scope.addRoomModal.hide();};
+    $scope.addRoom = function(room){$scope.screening.rooms.push(angular.copy(room)); $scope.hideAddRoom(); $scope.select($scope.screening.rooms.length-1);};
+
+    $scope.select = function(index){
+      selectedIndex = index;
+      $rootScope.$broadcast('roomIndexSelected', index);
+    }
+
+    $scope.isSelected = function(index){
+      return selectedIndex == index;
+    }
+
+    $scope.swipeLeft = function(){
+      $scope.showDelete = false;
+    }
+
+    $scope.swipeRight = function(){
+      $scope.showDelete = true;
+    }
+
+    $scope.removeRoom = function(index){
+      $ionicPopup.confirm({
+        title: "Ruimte Verwijderen",
+        template: "Bent u zeker dat u de Ruimte \"" + $scope.screening.rooms[index].room + "\" wilt verwijderen?",
+        cancelText: 'Annuleer'
+      }).then(function(confirmed){
+        if(confirmed){
+          $scope.screening.rooms.splice(index, 1);
+          if(selectedIndex == index){
+            $scope.select();
+          }
+        }
+        $scope.showDelete = false;
+      })
+    }
+
+    $scope.$on('surveyDetailReady', function(){
+      $scope.select(0);
+    })
+
+
+  })
+  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup, $ionicTabsDelegate, $cordovaCamera, $ionicPlatform, GUID){
 
     $ionicPlatform.ready(function(){
       $scope.takePicture = function(){
@@ -7,14 +65,14 @@ angular.module('roomscreening.controllers.survey', [])
           quality: 100,
           destinationType: Camera.DestinationType.DATA_URL,
           sourceType: Camera.PictureSourceType.CAMERA,
-          allowEdit: true,
           encodingType: Camera.EncodingType.PNG,
           saveToPhotoAlbum: false,
           correctOrientation:true
         }).then(function(imageData){
           $scope.screening.photos.push({
             room_id: $scope.room.room_id,
-            title: "",
+            title: $scope.room.room,
+            file_name: "photo_"+GUID.generate()+".png",
             mime_type: "image/png",
             file_base64: imageData,
             last_update_date: new Date()
@@ -109,6 +167,10 @@ angular.module('roomscreening.controllers.survey', [])
 
   })
 
+  .controller('SurveyListCtrl', function($scope){
+
+  })
+
   .controller('IssueCtrl', function($scope, $log, $ionicPopover){
     if($scope.issue == null){
       $log.error("IssueCtrl did not receive an issue from it's directive");
@@ -157,63 +219,6 @@ angular.module('roomscreening.controllers.survey', [])
   })
 
 
-  .controller('SurveyOverviewCtrl', function($scope, $stateParams, LocalScreeningService, $ionicModal,StructureService, RoomToIconService, $rootScope, $ionicPopup){
-    var selectedIndex;
-    $scope.structure = StructureService.get();
-    $scope.screening = LocalScreeningService.get($stateParams.screeningId);
 
-    $ionicModal.fromTemplateUrl('templates/survey/addRoom.modal.html', {
-      scope: $scope
-    }).then(function(modal){
-      $scope.addRoomModal = modal;
-    })
-
-    $scope.convert = function(room){
-      return RoomToIconService.convert(room.room);
-    }
-
-    $scope.showAddRoom = function(){$scope.addRoomModal.show();};
-    $scope.hideAddRoom = function(){$scope.addRoomModal.hide();};
-    $scope.addRoom = function(room){$scope.screening.rooms.push(angular.copy(room)); $scope.hideAddRoom(); $scope.select($scope.screening.rooms.length-1);};
-
-    $scope.select = function(index){
-      selectedIndex = index;
-      $rootScope.$broadcast('roomIndexSelected', index);
-    }
-
-    $scope.isSelected = function(index){
-      return selectedIndex == index;
-    }
-
-    $scope.swipeLeft = function(){
-      $scope.showDelete = false;
-    }
-
-    $scope.swipeRight = function(){
-      $scope.showDelete = true;
-    }
-
-    $scope.removeRoom = function(index){
-      $ionicPopup.confirm({
-        title: "Ruimte Verwijderen",
-        template: "Bent u zeker dat u de Ruimte \"" + $scope.screening.rooms[index].room + "\" wilt verwijderen?",
-        cancelText: 'Annuleer'
-      }).then(function(confirmed){
-        if(confirmed){
-          $scope.screening.rooms.splice(index, 1);
-          if(selectedIndex == index){
-            $scope.select();
-          }
-        }
-        $scope.showDelete = false;
-      })
-    }
-
-    $scope.$on('surveyDetailReady', function(){
-      $scope.select(0);
-    })
-
-
-  })
 
   ;

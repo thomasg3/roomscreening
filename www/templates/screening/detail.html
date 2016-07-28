@@ -1,7 +1,7 @@
 <ion-view>
 
     <ion-nav-buttons side="right">
-      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward" ng-if="screening && !screening.complete">
+      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward" ng-if="screening">
         <i class="icon ion-edit"></i>
         Bewerken
       </a>
@@ -42,6 +42,7 @@
         </div>
       </div>
 
+
       <!-- List of rooms -->
       <ion-list class="list card">
         <ion-item collection-repeat="room in screening.rooms">
@@ -53,6 +54,13 @@
             </span>
             <span ng-if="numberOfIssues(screening, room) != 1">
               hindernissen
+            </span>
+            , {{numberOfPhotos(screening, room)}}
+            <span ng-if="numberOfPhotos(screening, room) == 1">
+              foto
+            </span>
+            <span ng-if="numberOfPhotos(screening, room) != 1">
+              foto's
             </span>
           </span>
         </ion-item>

@@ -10,4 +10,16 @@ angular.module('roomscreening.directives', [])
       controller: 'IssueCtrl',
     }
   })
+  .directive('rsSurveyList', function(){
+    return {
+      restrict: 'E',
+      templateUrl: 'templates/survey/surveyList.html',
+      scope: {
+        structure: '=',
+        room: '=',
+        kinds: '='
+      },
+      controller: 'SurveyListCtrl'
+    }
+  })
 ;

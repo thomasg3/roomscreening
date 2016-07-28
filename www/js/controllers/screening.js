@@ -23,6 +23,8 @@ angular.module('roomscreening.controllers.goals', [])
     });
   }
 
+  $scope.$on('SyncComplete', reset);
+
 
   $scope.$watch('screenings', reset, true);
 
@@ -87,6 +89,15 @@ angular.module('roomscreening.controllers.goals', [])
       return issue.room_id == room.room_id;
     }).length;
   };
+
+  $scope.numberOfPhotos = function(screening, room){
+    if(screening.photos == null){
+      return 0;
+    }
+    return screening.photos.filter(function(photo){
+      return photo.room_id == room.room_id;
+    }).length;
+  }
 
   $rootScope.$broadcast('screeningDetailReady');
   $scope.complete = function(screening){
