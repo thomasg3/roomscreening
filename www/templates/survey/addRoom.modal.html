@@ -5,7 +5,7 @@
   </ion-header-bar>
   <ion-content>
     <ion-list>
-      <ion-item class="item-icon-left" ng-repeat="room in structure.rooms" ng-click="addRoom(room)">
+      <ion-item class="item-icon-left" ng-repeat="room in structure.rooms | roomFilter:screening.rooms" ng-click="addRoom(room)">
         <i class="icon {{convert(room)}}"></i>
         {{room.room}}
       </ion-item>

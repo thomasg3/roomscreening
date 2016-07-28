@@ -29,4 +29,13 @@ angular.module('roomscreening.filters', [])
       })
     }
   })
+  .filter('roomFilter', function(){
+    return function(items, rooms){
+      return items.filter(function(item){
+        return ! rooms.some(function(room){
+          return room.room_id == item.room_id;
+        })
+      })
+    }
+  })
 ;
