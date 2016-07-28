@@ -16,10 +16,22 @@ angular.module('roomscreening.directives', [])
       templateUrl: 'templates/survey/surveyList.html',
       scope: {
         structure: '=',
+        screening: '=',
         room: '=',
         kinds: '='
       },
       controller: 'SurveyListCtrl'
+    }
+  })
+  .directive('rsSurveyPhotos', function(){
+    return {
+      restrict: 'E',
+      templateUrl: 'templates/survey/photos.html',
+      scope: {
+        screening: '=',
+        room: '=',
+      },
+      controller: 'SurveyPhotosCtrl'
     }
   })
 ;

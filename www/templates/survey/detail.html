@@ -5,61 +5,13 @@
     <ion-tab title="Foto's" icon="ion-images" on-select="showPhotos()"></ion-tab>
   </ion-tabs>
   <ion-content>
-    <ion-list ng-if="surveyTab()">
-      <!-- CATEGORY -->
-      <div ng-repeat="category in structure.categories | categoriesFilter:room.room_id | orderBy:order_nr">
-        <ion-item class="item-button-left item-stable" ng-model="categoryShow[category.category_id]">
-          <button
-            class="button icon button-clear"
-            ng-class="{'button-dark': !hasIssue(room.room_id,category.category_id), 'ion-android-radio-button-off': !hasIssue(room.room_id, category.category_id), 'ion-android-checkmark-circle': hasIssue(room.room_id, category.category_id), 'button-positive': hasIssue(room.room_id, category.category_id)}"
-            ng-click="toggleIssue(room.room_id, category.category_id, null, null)">
-          </button>
-          <strong><u>{{category.category}}</u></strong>
-        </ion-item>
-        <rs-issue issue="getIssue(room.room_id, category.category_id)" kinds="kinds" ng-if="hasIssue(room.room_id, category.category_id)"></rs-issue>
-        <ion-list>
-          <!-- ITEM -->
-          <div ng-repeat="item in structure.items | itemFilter:room.room_id:category.category_id | orderBy:order_nr">
-            <ion-item class="item-button-left" ng-model="itemShow[category.category_id][item.item_id]">
-              <button
-                class="button icon button-clear"
-                ng-class="{'button-dark': !hasIssue(room.room_id,category.category_id,item.item_id), 'ion-android-radio-button-off': !hasIssue(room.room_id, category.category_id, item.item_id), 'ion-android-checkmark-circle': hasIssue(room.room_id, category.category_id, item.item_id), 'button-positive': hasIssue(room.room_id, category.category_id, item.item_id)}"
-                ng-click="toggleIssue(room.room_id, category.category_id, item.item_id, null)">
-              </button>
-              {{item.item}}
-            </ion-item>
-            <rs-issue issue="getIssue(room.room_id, category.category_id, item.item_id)" kinds="kinds" ng-if="hasIssue(room.room_id, category.category_id, item.item_id)"></rs-issue>
-            <div class="col-offset-10">
-              <ion-list>
-                <!-- SUBITEM -->
-                <div ng-repeat="sub_item in structure.sub_items | subitemFilter:room.room_id:category.category_id:item.item_id | orderBy:order_nr">
-                  <ion-item class="item-button-left" ng-model="subItemShow[category.category_id][item.item_id][sub_item.sub_item_id]">
-                    <button
-                      class="button icon button-clear"
-                      ng-class="{'button-dark': !hasIssue(room.room_id,category.category_id,item.item_id, sub_item.sub_item_id), 'ion-android-radio-button-off': !hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id), 'ion-android-checkmark-circle': hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id), 'button-positive': hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)}"
-                      ng-click="toggleIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)">
-                    </button>
-                    {{sub_item.sub_item}}
-                  </ion-item>
-                  <rs-issue issue="getIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)" kinds="kinds" ng-if="hasIssue(room.room_id, category.category_id, item.item_id, sub_item.sub_item_id)"></rs-issue>
-                </div>
-              </ion-list>
-            </div>
-          </div>
-        </ion-list>
-      </div>
-    </ion-list>
-    <div ng-if="photoTab()">
-      <button class="button button-large button-full button-positive icon ion-camera" ng-click="takePicture()"></button>
-      <ion-list>
-        <ion-item collection-repeat="photo in screening.photos | filter:{room_id:room.room_id}" class="item-thumbnail-left">
-          <img src="data:image/png;base64,{{photo.file_base64}}" />
-          <h2>{{photo.title}}</h2>
-          <p>{{photo.last_update_date | date:"HH:mm dd/MM/yyyy"}}</p>
-        </ion-item>
-      </ion-list>
+    <div ng-if="room">
+      <rs-survey-list ng-if="surveyTab()" structure="structure" screening="screening" room="room" kinds="kinds"></rs-survey-list>
+      <rs-survey-photos ng-if="photoTab()" screening="screening" room="room"></rs-survey-photos>
+      <div id="extraPadding"></div>
     </div>
-    <div ng-if="room" style="height:400px;width:100px"></div>
+
+
     <div ng-if="!room">
       <ion-content>
         <div class="row row-center">

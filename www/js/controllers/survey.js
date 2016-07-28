@@ -1,5 +1,5 @@
 angular.module('roomscreening.controllers.survey', [])
-  .controller('SurveyOverviewCtrl', function($scope, $stateParams, LocalScreeningService, $ionicModal,StructureService, RoomToIconService, $rootScope, $ionicPopup){
+  .controller('SurveyOverviewCtrl', function($scope, $stateParams, LocalScreeningService, $ionicModal,StructureService, RoomToIconService, $rootScope, $ionicPopup, $log){
     var selectedIndex;
     $scope.structure = StructureService.get();
     $scope.screening = LocalScreeningService.get($stateParams.screeningId);
@@ -42,7 +42,13 @@ angular.module('roomscreening.controllers.survey', [])
         cancelText: 'Annuleer'
       }).then(function(confirmed){
         if(confirmed){
-          $scope.screening.rooms.splice(index, 1);
+          var room = $scope.screening.rooms.splice(index, 1)[0];
+          $scope.screening.issues = $scope.screening.issues.filter(function(issue){
+            return issue.room_id != room.room_id
+          })
+          $scope.screening.photos = $scope.screening.photos.filter(function(photo){
+            return photo.room_id != room.room_id
+          })
           if(selectedIndex == index){
             $scope.select();
           }
@@ -57,45 +63,44 @@ angular.module('roomscreening.controllers.survey', [])
 
 
   })
-  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup, $ionicTabsDelegate, $cordovaCamera, $ionicPlatform, GUID){
-
-    $ionicPlatform.ready(function(){
-      $scope.takePicture = function(){
-        $cordovaCamera.getPicture({
-          quality: 100,
-          destinationType: Camera.DestinationType.DATA_URL,
-          sourceType: Camera.PictureSourceType.CAMERA,
-          encodingType: Camera.EncodingType.PNG,
-          saveToPhotoAlbum: false,
-          correctOrientation:true
-        }).then(function(imageData){
-          $scope.screening.photos.push({
-            room_id: $scope.room.room_id,
-            title: $scope.room.room,
-            file_name: "photo_"+GUID.generate()+".png",
-            mime_type: "image/png",
-            file_base64: imageData,
-            last_update_date: new Date()
-          });
-        }, function(error){
-          $log.info(error);
-        })
-      }
-    });
-
+  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, LocalScreeningService, $stateParams, KindOfIssueService){
     $scope.structure = StructureService.get();
     $scope.screening = LocalScreeningService.get($stateParams.screeningId);
+    $scope.kinds = KindOfIssueService.get();
+
+
     if($scope.screening.issues == null){
       $scope.screening.issues = [];
     }
     if($scope.screening.photos == null){
       $scope.screening.photos = [];
     }
+
     $scope.$on('roomIndexSelected', function(event, index){
         $scope.room = $scope.screening.rooms[index];
-        $ionicTabsDelegate.select(0);
     });
-    $scope.kinds = KindOfIssueService.get();
+
+    $scope.showSurvey = function(){
+      $scope.tabIndex = 0;
+    }
+
+    $scope.showPhotos = function(){
+      $scope.tabIndex = 1;
+    }
+
+    $scope.surveyTab = function(){
+      return $scope.tabIndex == 0;
+    }
+
+    $scope.photoTab = function(){
+      return $scope.tabIndex == 1;
+    }
+
+    $rootScope.$broadcast('surveyDetailReady');
+
+  })
+
+  .controller('SurveyListCtrl', function($scope, $ionicPopup){
 
     var isIssue = function(issue, roomId, categoryId, itemId, subItemId){
       return issue.room_id == roomId
@@ -147,28 +152,32 @@ angular.module('roomscreening.controllers.survey', [])
       }
     }
 
-    $scope.showSurvey = function(){
-      $scope.tabIndex = 0;
-    }
-
-    $scope.showPhotos = function(){
-      $scope.tabIndex = 1;
-    }
-
-    $scope.surveyTab = function(){
-      return $scope.tabIndex == 0;
-    }
-
-    $scope.photoTab = function(){
-      return $scope.tabIndex == 1;
-    }
-
-    $rootScope.$broadcast('surveyDetailReady');
-
   })
 
-  .controller('SurveyListCtrl', function($scope){
-
+  .controller('SurveyPhotosCtrl', function($scope, $ionicPlatform, $cordovaCamera, GUID){
+    $ionicPlatform.ready(function(){
+      $scope.takePicture = function(){
+        $cordovaCamera.getPicture({
+          quality: 100,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.CAMERA,
+          encodingType: Camera.EncodingType.PNG,
+          saveToPhotoAlbum: false,
+          correctOrientation:true
+        }).then(function(imageData){
+          $scope.screening.photos.push({
+            room_id: $scope.room.room_id,
+            title: $scope.room.room,
+            file_name: "photo_"+GUID.generate()+".png",
+            mime_type: "image/png",
+            file_base64: imageData,
+            last_update_date: new Date()
+          });
+        }, function(error){
+          $log.info(error);
+        })
+      }
+    });
   })
 
   .controller('IssueCtrl', function($scope, $log, $ionicPopover){

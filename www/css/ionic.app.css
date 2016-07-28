@@ -9828,3 +9828,7 @@ a.button {
   padding-bottom: 1px;
   color: #fff;
   margin-bottom: 10px; }
+
+#extraPadding {
+  height: 400px;
+  width: 100px; }
