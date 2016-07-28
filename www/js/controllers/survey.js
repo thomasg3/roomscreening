@@ -155,6 +155,7 @@ angular.module('roomscreening.controllers.survey', [])
   })
 
   .controller('SurveyPhotosCtrl', function($scope, $ionicPlatform, $cordovaCamera, GUID, $log, $ionicModal){
+
     $ionicPlatform.ready(function(){
       $scope.takePicture = function(){
         $cordovaCamera.getPicture({
@@ -175,7 +176,7 @@ angular.module('roomscreening.controllers.survey', [])
             last_update_date: new Date()
           });
         }, function(error){
-          $log.info(error);
+          $log.error(error);
         })
       }
     });
@@ -193,6 +194,19 @@ angular.module('roomscreening.controllers.survey', [])
 
     $scope.hidePhotoDetail = function(){
       $scope.photoModal.hide();
+    }
+
+    $scope.swipeRight = function(){
+      $scope.showDelete = true;
+    }
+
+    $scope.swipeLeft = function(){
+      $scope.showDelete = false;
+    }
+
+    $scope.remove = function(photoIndex){
+      $scope.screening.photos.splice(photoIndex, 1);
+      $scope.showDelete = false;
     }
 
   })

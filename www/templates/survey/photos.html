@@ -1,10 +1,22 @@
 <div class="padding">
   <button class="button button-large button-full button-positive icon ion-camera" ng-click="takePicture()"></button>
-  <ion-list>
-    <ion-item collection-repeat="photo in screening.photos | filter:{room_id:room.room_id}" class="item-thumbnail-left" ng-click="showPhotoDetail(photo)">
+  <ion-list show-delete="showDelete">
+    <ion-item
+      ng-repeat="photo in screening.photos | filter:{room_id:room.room_id} track by $index"
+      class="item-thumbnail-left"
+      ng-click="showPhotoDetail(photo)"
+      on-swipe-right="swipeRight()"
+      on-swipe-left="swipeLeft()">
+      <ion-delete-button class="ion-trash-a" ng-click="remove($index)"></ion-delete-button>
       <img ng-src="data:image/png;base64,{{photo.file_base64}}" />
       <h2>{{photo.title}}</h2>
       <p>{{photo.last_update_date | date:"HH:mm dd/MM/yyyy"}}</p>
+    </ion-item>
+    <ion-item ng-if="!screening.photos.length" class="item-icon-left item-icon-right item-text-wrap text-center">
+      <i class="icon ion-arrow-up-a"></i>
+      <h2>Geen Foto's</h2>
+      <p>Neem een Foto van de Ruimte.</p>
+      <i class="icon ion-arrow-up-a"></i>
     </ion-item>
   </ion-list>
 </div>
