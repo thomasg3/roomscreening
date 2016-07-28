@@ -5,8 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreening.controllers', 'roomscreening.services', 'roomscreening.filters', 'roomscreening.directives'])
-.run(function($ionicPlatform, $localStorage, $rootScope, $state, $log, $cordovaNetwork, SyncService, $ionicLoading, $timeout, freshnessThreshold) {
+.run(function($ionicPlatform,$localStorage, $rootScope, $state, $log, $cordovaNetwork, SyncService, $ionicLoading, $timeout, freshnessThreshold) {
   $ionicPlatform.ready(function() {
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -86,7 +87,8 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(function($ionicConfigProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
+  $ionicConfigProvider.tabs.position('bottom');
   $httpProvider.interceptors.push('httpAuthenticationInterceptor');
   $httpProvider.interceptors.push('httpLogginInterceptor');
   $stateProvider

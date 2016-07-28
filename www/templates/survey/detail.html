@@ -50,12 +50,12 @@
       </div>
     </ion-list>
     <div ng-if="photoTab()">
-      <button class="button button-large button-full button-positive icon ion-camera"></button>
+      <button class="button button-large button-full button-positive icon ion-camera" ng-click="takePicture()"></button>
       <ion-list>
-        <ion-item class="item-thumbnail-left">
-          <img src="img/ionic.png" />
-          <h2>Title</h2>
-          <p> Today </p>
+        <ion-item ng-repeat="photo in screening.photos" class="item-thumbnail-left">
+          <img src="data:image/png;base64,{{photo.file_base64}}" />
+          <h2>{{photo.title}}</h2>
+          <p>{{photo.last_update_date | date:'short'}}</p>
         </ion-item>
       </ion-list>
     </div>

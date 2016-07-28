@@ -274,6 +274,13 @@ angular.module('roomscreening.services', [])
       });
     }
 
+    var completeSync = function(){
+      $localStorage.last_sync = new Date();
+      $log.debug("Sync::Complete");
+      $log.debug("Sync took "+Math.abs((new Date($localStorage.sync_startTime)).getTime() - (new Date()).getTime())+"ms");
+      $rootScope.$broadcast('SyncComplete');
+    }
+
     var executionQueue = [syncCompleteScreenings, syncStructure, syncClients, syncKinds];
 
 
@@ -283,9 +290,7 @@ angular.module('roomscreening.services', [])
       increment: function(){
         this.count++;
         if(this.count != 0 && this.count%executionQueue.length == 0){
-          $localStorage.last_sync = new Date();
-          $log.debug("Sync::Complete");
-          $rootScope.$broadcast('SyncComplete');
+          completeSync();
         }
       }
     }
@@ -298,6 +303,7 @@ angular.module('roomscreening.services', [])
         var difference = Math.abs(now - lastSync);
         var differenceMinutes = Math.ceil(difference / (60 * 1000));
         if(differenceMinutes > freshnessThreshold && (!ionic.Platform.isWebView() || $cordovaNetwork.isOnline()) && $localStorage.loggedIn){
+          $localStorage.sync_startTime = new Date();
           $log.debug("Sync::Start");
           $rootScope.$broadcast('SyncStart');
 

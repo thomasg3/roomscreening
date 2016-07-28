@@ -1,9 +1,37 @@
 angular.module('roomscreening.controllers.survey', [])
-  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup, $ionicTabsDelegate){
+  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, $log, LocalScreeningService, $stateParams, KindOfIssueService, $ionicPopup, $ionicTabsDelegate, $cordovaCamera, $ionicPlatform){
+
+    $ionicPlatform.ready(function(){
+      $scope.takePicture = function(){
+        $cordovaCamera.getPicture({
+          quality: 100,
+          destinationType: Camera.DestinationType.DATA_URL,
+          sourceType: Camera.PictureSourceType.CAMERA,
+          allowEdit: true,
+          encodingType: Camera.EncodingType.PNG,
+          saveToPhotoAlbum: false,
+          correctOrientation:true
+        }).then(function(imageData){
+          $scope.screening.photos.push({
+            room_id: $scope.room.room_id,
+            title: "",
+            mime_type: "image/png",
+            file_base64: imageData,
+            last_update_date: new Date()
+          });
+        }, function(error){
+          $log.info(error);
+        })
+      }
+    });
+
     $scope.structure = StructureService.get();
     $scope.screening = LocalScreeningService.get($stateParams.screeningId);
     if($scope.screening.issues == null){
       $scope.screening.issues = [];
+    }
+    if($scope.screening.photos == null){
+      $scope.screening.photos = [];
     }
     $scope.$on('roomIndexSelected', function(event, index){
         $scope.room = $scope.screening.rooms[index];
