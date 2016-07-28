@@ -154,9 +154,9 @@ angular.module('roomscreening.controllers.survey', [])
 
   })
 
-  .controller('SurveyPhotosCtrl', function($scope, $ionicPlatform, $cordovaCamera, GUID, $log, $ionicModal){
+  .controller('SurveyPhotosCtrl', function($scope, $ionicPlatform, $cordovaCamera, GUID, $log, $ionicModal, PhotoService){
 
-    $ionicPlatform.ready(function(){
+    /**$ionicPlatform.ready(function(){
       $scope.takePicture = function(){
         $cordovaCamera.getPicture({
           quality: 100,
@@ -179,7 +179,36 @@ angular.module('roomscreening.controllers.survey', [])
           $log.error(error);
         })
       }
-    });
+    });**/
+
+    $scope.photoData = {};
+
+
+
+    $scope.screening.photos.forEach(function(photo){
+      PhotoService.getPhoto(photo.file_name, function(data){
+        $log.debug(data);
+        $scope.photoData[photo.file_name] = data;
+      }, function(error){
+        $log.warn(error);
+      })
+    })
+
+    $scope.takePicture = function(){
+      PhotoService.takePhoto(function(photo){
+        photo.room_id = $scope.room.room_id;
+        photo.title = $scope.room.room;
+        $scope.screening.photos.push(photo);
+        PhotoService.getPhoto(photo.file_name, function(data){
+          $log.debug(data);
+          $scope.photoData[photo.file_name] = data;
+        }, function(error){
+          $log.warn(error);
+        })
+      }, function(error){
+        $log.warn(error);
+      });
+    }
 
     $ionicModal.fromTemplateUrl('templates/survey/photo.modal.html', {
       scope: $scope
@@ -187,8 +216,9 @@ angular.module('roomscreening.controllers.survey', [])
       $scope.photoModal = modal;
     })
 
-    $scope.showPhotoDetail = function(photo){
+    $scope.showPhotoDetail = function(photo, data){
       $scope.selectedPhoto = photo;
+      $scope.selectedData = data;
       $scope.photoModal.show();
     }
 
@@ -205,7 +235,8 @@ angular.module('roomscreening.controllers.survey', [])
     }
 
     $scope.remove = function(photoIndex){
-      $scope.screening.photos.splice(photoIndex, 1);
+      var photo = $scope.screening.photos.splice(photoIndex, 1)[0];
+      PhotoService.removePhoto(photo.file_name);
       $scope.showDelete = false;
     }
 

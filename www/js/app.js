@@ -47,7 +47,7 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
     })
 
     var timer = function(){
-      var minutes  = freshnessThreshold;
+      var minutes  = freshnessThreshold/2;
       $log.debug((new Date())+":: Timer: set for "+minutes+" minutes.")
       $timeout(function(){
         SyncService.sync();
@@ -62,7 +62,9 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova','roomscreenin
     });
 
     $rootScope.$on('SyncComplete', function(){
-      $ionicLoading.hide();
+      $timeout(function(){
+        $ionicLoading.hide();
+      }, 1000);
       timer();
     });
 

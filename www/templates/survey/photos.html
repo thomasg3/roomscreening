@@ -4,11 +4,11 @@
     <ion-item
       ng-repeat="photo in screening.photos | filter:{room_id:room.room_id} track by $index"
       class="item-thumbnail-left"
-      ng-click="showPhotoDetail(photo)"
+      ng-click="showPhotoDetail(photo, photoData[photo.file_name])"
       on-swipe-right="swipeRight()"
       on-swipe-left="swipeLeft()">
       <ion-delete-button class="ion-trash-a" ng-click="remove($index)"></ion-delete-button>
-      <img ng-src="data:image/png;base64,{{photo.file_base64}}" />
+      <img ng-src="data:{{photo.mime_type}};base64,{{photoData[photo.file_name]}}" />
       <h2>{{photo.title}}</h2>
       <p>{{photo.last_update_date | date:"HH:mm dd/MM/yyyy"}}</p>
     </ion-item>

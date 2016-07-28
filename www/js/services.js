@@ -1,7 +1,7 @@
 angular.module('roomscreening.services', [])
   .constant('appAuthenticationToken', '1234DFSFSG5T6G678ISFDFEE2ZVBGJIK')
   .constant('baseURL', 'https://pxl.apexhealth.eu/ords/hopp/rs/api/')
-  .constant('freshnessThreshold', 10 /*minutes*/)
+  .constant('freshnessThreshold', 2 /*minutes*/)
   .factory('httpAuthenticationInterceptor', function(appAuthenticationToken){
     return {
       request: function(config){
@@ -199,57 +199,147 @@ angular.module('roomscreening.services', [])
       }
     }
   })
-  .factory('SyncService', function(baseURL, $rootScope, $cordovaNetwork, $log, $localStorage ,LocalScreeningService, ClientService, StructureService, KindOfIssueService, DictToArray, $http, freshnessThreshold){
-    var syncCompleteScreenings = function(){
-      $log.debug("Sync::CompleteScreenings");
-      var completeScreenings = DictToArray.convert(LocalScreeningService.getAll()).filter(function(screening){
+  .factory('PhotoService', function($cordovaFile, $cordovaCamera, $ionicPlatform, GUID, $log){
+    var prefix = 'Ro0mScr33n1nG';
+    return {
+        takePhoto: function(success, failure){
+          $ionicPlatform.ready(function(){
+            $cordovaCamera.getPicture({
+              quality: 100,
+              destinationType: Camera.DestinationType.DATA_URL,
+              sourceType: Camera.PictureSourceType.CAMERA,
+              encodingType: Camera.EncodingType.PNG,
+              allowEdit: false,
+              saveToPhotoAlbum: false,
+              correctOrientation: true
+            }).then(function(imageData){
+              var fileName = 'photo_'+GUID.generate()+'.png'
+              $cordovaFile.writeFile(cordova.file.dataDirectory, prefix+fileName, imageData, true).then(function(file){
+                success({
+                  file_name: fileName,
+                  mime_type: "image/png",
+                  local_url: file.target.localURL,
+                  last_update_date: new Date()
+                })
+              }, function(error){
+                failure(error);
+              })
+            }, function(error){
+              failure(error);
+            })
+          });
+
+        },
+        getPhoto : function(file_name, success, failure){
+           $ionicPlatform.ready(function(){
+              $cordovaFile.readAsBinaryString(cordova.file.dataDirectory, prefix+file_name).then(function(data){
+                success(data);
+              }, function(error){
+                failure(error);
+              })
+           })
+        },
+        removePhoto: function(file_name){
+          $ionicPlatform.ready(function(){
+            $cordovaFile.removeFile(cordova.file.dataDirectory, prefix+file_name);
+          });
+        }
+    }
+  })
+  .factory('SyncService', function(baseURL, $rootScope, $cordovaNetwork, $log, $localStorage ,LocalScreeningService, ClientService, StructureService, KindOfIssueService, DictToArray, $http, freshnessThreshold, $timeout, PhotoService, AccountService){
+    var postData = {};
+    var completeScreenings = [];
+    var preparePostData = function(){
+      $log.debug("Sync::PreparePost::Start");
+      completeScreenings = DictToArray.convert(LocalScreeningService.getAll()).filter(function(screening){
         return screening.complete;
       });
+      var photoData = {}
+      var ok = false;
       if(completeScreenings.length){
-        data = completeScreenings.map(function(screening){
-          return {
-            client_id: screening.client.id,
-            registration_date: screening.last_edit,
-            question: screening.goal,
-            issues: screening.issues.map(function(issue){
-              return {
-                  room_id: issue.room_id,
-                  category_id: issue.category_id,
-                  item_id: issue.item_id,
-                  sub_item_id: issue.sub_item_id,
-                  description: issue.description,
-                  not_applicable: (issue.not_applicable)?'Y':'N',
-                  issue_client: (issue.issue_client)?'Y':'N',
-                  issue_care_giver: (issue.issue_care_giver)?'Y':'N',
-                  sort_issue_ids: KindOfIssueService.convert(issue.sort_issues)
-              }
-            }),
-            pictures: screening.photos
-          };
+        var photoFiles = [].concat.apply([], completeScreenings.map(function(s){
+          return s.photos;
+        })).map(function(photo){
+          return photo.file_name;
         });
-        data = {items: data};
-        $log.debug("Sync::CompleteScreenings::Initilized");
-        $http.post(baseURL+'dossier', data, {headers: {client_id: -1}}).then(function(){
-          completeScreenings.forEach(function(s){
-            LocalScreeningService.remove(s.id);
+        var fetch = function(i){
+          if(i == photoFiles.length){
+            ok = true;
+          }
+          PhotoService.getPhoto(photoFiles[i], function(data){
+            photoData[photoFiles[i]] = data;
+            fetch(i+1);
+          })
+        }
+        var proceed = function(){
+          data = completeScreenings.map(function(screening){
+            return {
+              client_id: screening.client.id,
+              registration_date: screening.last_edit,
+              question: screening.goal,
+              issues: screening.issues.map(function(issue){
+                return {
+                    room_id: issue.room_id,
+                    category_id: issue.category_id,
+                    item_id: issue.item_id,
+                    sub_item_id: issue.sub_item_id,
+                    description: issue.description,
+                    not_applicable: (issue.not_applicable)?'Y':'N',
+                    issue_client: (issue.issue_client)?'Y':'N',
+                    issue_care_giver: (issue.issue_care_giver)?'Y':'N',
+                    sort_issue_ids: KindOfIssueService.convert(issue.sort_issues)
+                }
+              }),
+              pictures: screening.photos.map(function(photo){
+                return {
+                  room_id: photo.room_id,
+                  title: photo.title,
+                  file_name: photo.file_name,
+                  mime_type: photo.mime_type,
+                  last_update_date: photo.last_update_date,
+                  file_base64: photoData[photo.file_name]
+                }
+              })
+            };
           });
-          $log.debug("Sync::CompleteScreenings::Success");
-          $rootScope.$emit("Sync.completeScreenings.success");
-        }, function(){
-          $log.debug("Sync::CompleteScreenings::Error");
-          $rootScope.$emit("Sync.completeScreenings.error");
-        })
+          postData = {items: data};
+          $log.debug(angular.toJson(photoData));
+          $log.debug(angular.toJson(data));
+          $log.debug("Sync::PreparePost::Done");
+          $rootScope.$emit('Sync.preparePostData.done');
+        }
+        var waiter = function(){
+          $timeout(function(){
+            if(!ok){
+              waiter();
+            } else {
+              proceed();
+            }
+          }, 500);
+        };
+        fetch(0);
+        waiter();
       } else {
+        $log.debug("Sync::PreparePost::DidNothingLol ¯\\_(ツ)_/¯");
+        $rootScope.$emit('Sync.preparePostData.done');
+      }
+    };
+
+    var syncCompleteScreenings = function(){
+      $http.post(baseURL+'dossier', postData, {headers: {client_id: $localStorage.currentUser.client_id}}).then(function(){
+        completeScreenings.forEach(function(s){
+          LocalScreeningService.remove(s.id);
+          s.photos.forEach(function(p){
+            PhotoService.removePhoto(p.file_name);
+          });
+        });
         $log.debug("Sync::CompleteScreenings::Success");
         $rootScope.$emit("Sync.completeScreenings.success");
-      }
-
-
-
-      //send
-      //adjust storage to success/error
-      //feedback
-    };
+      }, function(){
+        $log.debug("Sync::CompleteScreenings::Error");
+        $rootScope.$emit("Sync.completeScreenings.error");
+      })
+    }
 
     var syncStructure = function(){
       $log.debug("Sync::Structure");
@@ -331,9 +421,13 @@ angular.module('roomscreening.services', [])
             });
           });
 
-          executionQueue.forEach(function(f){
-            f();
+          var listener = $rootScope.$on('Sync.preparePostData.done', function(){
+            listener();
+            executionQueue.forEach(function(f){
+              f();
+            });
           });
+          preparePostData();
         } else {
           $rootScope.$broadcast("SyncFail");
         }
