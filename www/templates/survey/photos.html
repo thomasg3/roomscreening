@@ -1,7 +1,7 @@
 <div class="padding">
   <button class="button button-large button-full button-positive icon ion-camera" ng-click="takePicture()"></button>
   <ion-list>
-    <ion-item collection-repeat="photo in screening.photos | filter:{room_id:room.room_id}" class="item-thumbnail-left">
+    <ion-item collection-repeat="photo in screening.photos | filter:{room_id:room.room_id}" class="item-thumbnail-left" ng-click="showPhotoDetail(photo)">
       <img ng-src="data:image/png;base64,{{photo.file_base64}}" />
       <h2>{{photo.title}}</h2>
       <p>{{photo.last_update_date | date:"HH:mm dd/MM/yyyy"}}</p>

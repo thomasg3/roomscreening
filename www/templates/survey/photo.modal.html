@@ -1,0 +1,14 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">{{selectedPhoto.title}}</h1>
+    <button class="button button-clear icon-left ion-close" ng-click="hidePhotoDetail()">Sluiten</button>
+  </ion-header-bar>
+  <ion-content>
+    <ion-pane>
+      <img class="photoImage" ng-src="data:image/png;base64,{{selectedPhoto.file_base64}}" width="100%" height="auto" />
+    </ion-pane>
+  </ion-content>
+  <ion-footer-bar>
+    <h1 class="title">{{selectedPhoto.last_update_date | date:"HH:mm dd/MM/yyyy"}}</h1>
+  </ion-footer-bar>
+</ion-modal-view>

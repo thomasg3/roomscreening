@@ -154,7 +154,7 @@ angular.module('roomscreening.controllers.survey', [])
 
   })
 
-  .controller('SurveyPhotosCtrl', function($scope, $ionicPlatform, $cordovaCamera, GUID){
+  .controller('SurveyPhotosCtrl', function($scope, $ionicPlatform, $cordovaCamera, GUID, $log, $ionicModal){
     $ionicPlatform.ready(function(){
       $scope.takePicture = function(){
         $cordovaCamera.getPicture({
@@ -162,8 +162,9 @@ angular.module('roomscreening.controllers.survey', [])
           destinationType: Camera.DestinationType.DATA_URL,
           sourceType: Camera.PictureSourceType.CAMERA,
           encodingType: Camera.EncodingType.PNG,
+          allowEdit: false,
           saveToPhotoAlbum: false,
-          correctOrientation:true
+          correctOrientation: true
         }).then(function(imageData){
           $scope.screening.photos.push({
             room_id: $scope.room.room_id,
@@ -178,6 +179,22 @@ angular.module('roomscreening.controllers.survey', [])
         })
       }
     });
+
+    $ionicModal.fromTemplateUrl('templates/survey/photo.modal.html', {
+      scope: $scope
+    }).then(function(modal){
+      $scope.photoModal = modal;
+    })
+
+    $scope.showPhotoDetail = function(photo){
+      $scope.selectedPhoto = photo;
+      $scope.photoModal.show();
+    }
+
+    $scope.hidePhotoDetail = function(){
+      $scope.photoModal.hide();
+    }
+
   })
 
   .controller('IssueCtrl', function($scope, $log, $ionicPopover){
