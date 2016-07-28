@@ -1,7 +1,7 @@
 angular.module('roomscreening.services', [])
   .constant('appAuthenticationToken', '1234DFSFSG5T6G678ISFDFEE2ZVBGJIK')
   .constant('baseURL', 'https://pxl.apexhealth.eu/ords/hopp/rs/api/')
-  .constant('freshnessThreshold', 2 /*minutes*/)
+  .constant('freshnessThreshold', 60 /*minutes*/)
   .factory('httpAuthenticationInterceptor', function(appAuthenticationToken){
     return {
       request: function(config){
