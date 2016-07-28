@@ -1,6 +1,7 @@
 <ion-view>
   <ion-header-bar class="bar-positive">
     <h1 class="title">Doelen</h1>
+    <button class="button button-clear icon" ng-class="{'ion-close': showDelete, 'ion-trash-a': !showDelete}" ng-click="toggleDelete()"></button>
   </ion-header-bar>
   <ion-content>
     <ion-list show-delete="showDelete">

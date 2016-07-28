@@ -53,6 +53,10 @@ angular.module('roomscreening.controllers.goals', [])
     $scope.showDelete = false;
   }
 
+  $scope.toggleDelete = function(){
+    $scope.showDelete = !$scope.showDelete;
+  }
+
   $scope.remove = function(id){
     var confirmPopup = $ionicPopup.confirm({
       title: "Doel Verwijderen",

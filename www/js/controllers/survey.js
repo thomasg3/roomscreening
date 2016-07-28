@@ -35,6 +35,10 @@ angular.module('roomscreening.controllers.survey', [])
       $scope.showDelete = true;
     }
 
+    $scope.toggleDelete = function(){
+      $scope.showDelete = !$scope.showDelete;
+    }
+
     $scope.removeRoom = function(index){
       $ionicPopup.confirm({
         title: "Ruimte Verwijderen",
@@ -155,35 +159,7 @@ angular.module('roomscreening.controllers.survey', [])
   })
 
   .controller('SurveyPhotosCtrl', function($scope, $ionicPlatform, $cordovaCamera, GUID, $log, $ionicModal, PhotoService){
-
-    /**$ionicPlatform.ready(function(){
-      $scope.takePicture = function(){
-        $cordovaCamera.getPicture({
-          quality: 100,
-          destinationType: Camera.DestinationType.DATA_URL,
-          sourceType: Camera.PictureSourceType.CAMERA,
-          encodingType: Camera.EncodingType.PNG,
-          allowEdit: false,
-          saveToPhotoAlbum: false,
-          correctOrientation: true
-        }).then(function(imageData){
-          $scope.screening.photos.push({
-            room_id: $scope.room.room_id,
-            title: $scope.room.room,
-            file_name: "photo_"+GUID.generate()+".png",
-            mime_type: "image/png",
-            file_base64: imageData,
-            last_update_date: new Date()
-          });
-        }, function(error){
-          $log.error(error);
-        })
-      }
-    });**/
-
     $scope.photoData = {};
-
-
 
     $scope.screening.photos.forEach(function(photo){
       PhotoService.getPhoto(photo.file_name, function(data){
@@ -232,6 +208,10 @@ angular.module('roomscreening.controllers.survey', [])
 
     $scope.swipeLeft = function(){
       $scope.showDelete = false;
+    }
+
+    $scope.toggleDelete = function(){
+      $scope.showDelete = !$scope.showDelete;
     }
 
     $scope.remove = function(photoIndex){

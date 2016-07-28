@@ -2,6 +2,7 @@
   <ion-header-bar class="bar-positive">
     <a class="button button-clear icon-left ion-android-arrow-back" href="#/app/screenings" nav-direction="back">Terug</a>
     <h1 class="title">Ruimtes</h1>
+    <button class="button button-clear icon" ng-class="{'ion-close': showDelete, 'ion-trash-a': !showDelete}" ng-click="toggleDelete()"></button>
   </ion-header-bar>
   <ion-content>
     <ion-list show-delete="showDelete">

@@ -1,3 +1,5 @@
+
+
 <div class="padding">
   <button class="button button-large button-full button-positive icon ion-camera" ng-click="takePicture()"></button>
   <ion-list show-delete="showDelete">
@@ -19,4 +21,5 @@
       <i class="icon ion-arrow-up-a"></i>
     </ion-item>
   </ion-list>
+  <button class="button button-clear button-full button-assertive icon" ng-class="{'ion-close': showDelete, 'ion-trash-a': !showDelete}" ng-click="toggleDelete()"></button>
 </div>
