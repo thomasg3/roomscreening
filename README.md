@@ -1,25 +1,35 @@
 Room Screening
 =====================
+Extension to the HOPP platform for screening rooms.
 
-A starting project for Ionic that optionally supports using custom SCSS.
+## Prerequisite
+For using and developing for this application, node.js, npm, bower, gulp,  ionic and cordova should be installed. Consult Google for more information or the Extra Documentation section.
 
-## Using this project
-
-We recommend using the [Ionic CLI](https://github.com/driftyco/ionic-cli) to create new Ionic projects that are based on this project but use a ready-made starter template.
-
-For example, to start a new Ionic project with the default tabs interface, make sure the `ionic` utility is installed:
-
+## Installation
+After cloning the repository, execute the following commands.
 ```bash
-$ npm install -g ionic
+$ npm install
+```
+```bash
+$ bower install
+```
+```bash
+$ cordova state reset
 ```
 
-Then run: 
-
+To test if the application is successfully installed, try the following command.
 ```bash
-$ ionic start myProject tabs
+$ ionic serve
 ```
+This will start up the browser. To test the application on an emulator or physical mobile device, try the following command. 
+```bash
+$ ionic run <platform>
+```
+with platform either `ios`or `android`.
 
-More info on this can be found on the Ionic [Getting Started](http://ionicframework.com/getting-started) page and the [Ionic CLI](https://github.com/driftyco/ionic-cli) repo.
+Please consult the official documentation of the ionic framework for further detail.
 
-## Issues
-Issues have been disabled on this repo, if you do find an issue or have a question consider posting it on the [Ionic Forum](http://forum.ionicframework.com/).  Or else if there is truly an error, follow our guidelines for [submitting an issue](http://ionicframework.com/submit-issue/) to the main Ionic repository.
+
+
+
+## Extra Documentation
