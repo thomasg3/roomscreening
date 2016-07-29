@@ -8,5 +8,8 @@
     "ngstorage": "^0.3.10",
     "ngCordova": "^0.1.27-alpha",
     "angular-resource": "^1.5.7"
+  },
+  "resolutions": {
+    "angular": "1.5.3"
   }
 }
