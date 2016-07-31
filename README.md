@@ -14,7 +14,7 @@ $ npm install
 $ bower install
 ```
 ```bash
-$ cordova state reset
+$ ionic state reset
 ```
 
 To test if the application is successfully installed, try the following command.
@@ -40,5 +40,4 @@ Please consult the official documentation of the ionic framework for further det
 * [ngCordova](http://ngcordova.com/docs/): Angular wrapper for Cordova
 * [Bower](https://bower.io): web package manager
 * [Gulp](http://gulpjs.com): task automation tool
-* [Sass](http://sass-lang.com) 
- 
+* [Sass](http://sass-lang.com)
