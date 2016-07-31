@@ -1,7 +1,7 @@
 <ion-view>
 
     <ion-nav-buttons side="right">
-      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward" ng-if="screening">
+      <a class="button button-clear icon-left" ng-href="#/screenings/edit/{{screening.id}}" nav-direction="forward" ng-if="screening && !screening.complete">
         <i class="icon ion-edit"></i>
         Bewerken
       </a>
