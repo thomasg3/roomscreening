@@ -7,7 +7,8 @@
   "dependencies": {
     "ngstorage": "^0.3.10",
     "ngCordova": "^0.1.27-alpha",
-    "angular-resource": "^1.5.7"
+    "angular-resource": "^1.5.7",
+    "angular-elastic": "^2.5.1"
   },
   "resolutions": {
     "angular": "1.5.3"
