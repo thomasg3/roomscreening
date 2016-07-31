@@ -67,7 +67,7 @@ angular.module('roomscreening.controllers.survey', [])
 
 
   })
-  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, LocalScreeningService, $stateParams, KindOfIssueService){
+  .controller('SurveyDetailCtrl', function($rootScope, $scope, StructureService, LocalScreeningService, $stateParams, KindOfIssueService, $ionicScrollDelegate){
     $scope.structure = StructureService.get();
     $scope.screening = LocalScreeningService.get($stateParams.screeningId);
     $scope.kinds = KindOfIssueService.get();
@@ -86,10 +86,12 @@ angular.module('roomscreening.controllers.survey', [])
 
     $scope.showSurvey = function(){
       $scope.tabIndex = 0;
+      $ionicScrollDelegate.scrollTop();
     }
 
     $scope.showPhotos = function(){
       $scope.tabIndex = 1;
+      $ionicScrollDelegate.scrollTop();
     }
 
     $scope.surveyTab = function(){
