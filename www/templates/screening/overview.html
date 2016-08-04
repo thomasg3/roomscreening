@@ -1,5 +1,6 @@
 <ion-view>
   <ion-header-bar class="bar-positive">
+    <button class="button button-clear icon ion-refresh" ng-click="doSynchronize()"></button>
     <h1 class="title">Doelen</h1>
     <button class="button button-clear icon" ng-class="{'ion-close': showDelete, 'ion-trash-a': !showDelete}" ng-click="toggleDelete()"></button>
   </ion-header-bar>

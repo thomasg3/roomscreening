@@ -1,6 +1,6 @@
 angular.module('roomscreening.controllers.goals', [])
 
-.controller('ScreeningOverviewCtrl', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory, $window){
+.controller('ScreeningOverviewCtrl', function($rootScope, $scope, $stateParams ,LocalScreeningService, $ionicPopup, $ionicHistory, $window, SyncService){
   $ionicHistory.clearCache();
   $ionicHistory.clearHistory();
   var array = function(screenings){
@@ -75,6 +75,10 @@ angular.module('roomscreening.controllers.goals', [])
         $scope.showDelete = false;
       }
     })
+  }
+
+  $scope.doSynchronize = function(){
+    SyncService.sync();
   }
 
   reset();
