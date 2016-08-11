@@ -397,12 +397,13 @@ angular.module('roomscreening.services', [])
 
 
     return {
-      sync: function(){
+      sync: function(forceSync){
+        forceSync = !!forceSync //convert undefined to false and true to true
         var lastSync = (new Date($localStorage.last_sync)).getTime();
         var now = (new Date()).getTime();
         var difference = Math.abs(now - lastSync);
         var differenceMinutes = Math.ceil(difference / (60 * 1000));
-        if(differenceMinutes > freshnessThreshold && (!ionic.Platform.isWebView() || $cordovaNetwork.isOnline()) && $localStorage.loggedIn){
+        if((forceSync || differenceMinutes > freshnessThreshold) && (!ionic.Platform.isWebView() || $cordovaNetwork.isOnline()) && $localStorage.loggedIn){
           $localStorage.sync_startTime = new Date();
           $log.debug("Sync::Start");
           $rootScope.$broadcast('SyncStart');

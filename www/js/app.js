@@ -45,11 +45,15 @@ angular.module('roomscreening', ['ionic', 'ngStorage', 'ngCordova', 'monospaced.
         $ionicLoading.hide();
       }, 1000);
     })
-
+    var timerHandler;
     var timer = function(){
       var minutes  = freshnessThreshold/2;
       $log.debug((new Date())+":: Timer: set for "+minutes+" minutes.")
-      $timeout(function(){
+      timerHandler = $timeout(function(){
+        if(timerHandler.cancel){
+          $log.debug('Canceling previous timer');
+          timerHandler.cancel();
+        }
         SyncService.sync();
       }, minutes*60*1000, false);
     }

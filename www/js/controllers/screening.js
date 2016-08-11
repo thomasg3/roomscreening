@@ -78,7 +78,7 @@ angular.module('roomscreening.controllers.goals', [])
   }
 
   $scope.doSynchronize = function(){
-    SyncService.sync();
+    SyncService.sync(true);
   }
 
   reset();
